@@ -14,16 +14,7 @@ const LandingPage = () => {
       flexDirection: 'column'
     }}>
       
-      {/* 1. TOP UTILITY STRIP */}
-      <div style={{ backgroundColor: '#362F2A', color: '#FCEEE7', padding: '8px 0', fontSize: '13px' }}>
-        <div className="container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <span>Institutional & Commercial Fitness Equipment Procurement</span>
-          <div className="top-strip-badges" style={{ display: 'flex', gap: '20px' }}>
-            <span>✓ Verified OEM Suppliers</span>
-            <span>✓ Milestone Escrow Protected</span>
-          </div>
-        </div>
-      </div>
+     
 
       {/* 2. NAVIGATION BAR */}
       <nav style={{
