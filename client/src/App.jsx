@@ -18,11 +18,30 @@ import Settings from './pages/admin/Settings.jsx';
 // Customer Components & Pages
 import CustomerSidebar from './components/Customer/CustomerSidebar.jsx';
 import CustomerNavbar from './components/Customer/CustomerNavbar.jsx';
-import CustomerDashboard from './pages/Customer/CustomerDashboard.jsx';
-import BrowseProducts from './pages/Customer/BrowseProducts.jsx';
-import ProductDetails from './pages/Customer/ProductDetails.jsx';
-import Cart from './pages/Customer/Cart.jsx';
-import Checkout from './pages/Customer/Checkout.jsx';
+import CustomerDashboard from './pages/customer/CustomerDashboard.jsx';
+import BrowseProducts from './pages/customer/BrowseProducts.jsx';
+import ProductDetails from './pages/customer/ProductDetails.jsx';
+import Cart from './pages/customer/Cart.jsx';
+import Checkout from './pages/customer/Checkout.jsx';
+
+
+import SupplierNavbar from './components/Supplier/SupplierNavbar.jsx';
+import SupplierSidebar from './components/Supplier/SupplierSidebar.jsx';
+import AddProduct from './pages/Supplier/AddProduct.jsx';
+import Buyers from './pages/Supplier/Buyers.jsx';
+import EditProduct from './page/Supplier/EditProuct.jsx';
+import Notifications from './pages/Supplier/Notifications.jsx';
+import  Messages from './pages/Supplier/Messages.jsx';
+import Inventory from './pages/Supplier/Inventory.jsx';
+import SupplierDashboard from './pages/Supplier/SupplierDashboard.jsx';
+import Settings from './pages/Supplier/Settings.jsx';
+import AddProduct from './pages/Supplier/AddProduct.jsx';
+import Orders from './pages/admin/Orders.jsx';
+import OrdersDetails from './pages/Supplier/OrderDetails.jsx';
+
+
+
+
 
 // Landing Page
 const LandingPage = () => (
