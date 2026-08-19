@@ -1,5 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 /* =========================
    GLOBAL
 ========================= */
@@ -32,7 +36,6 @@ body {
   margin: auto;
 }
 
-
 /* =========================
    HEADER / NAVIGATION
 ========================= */
@@ -53,7 +56,6 @@ body {
   justify-content: space-between;
 }
 
-
 /* LOGO */
 
 .logo {
@@ -66,7 +68,6 @@ body {
 .logo span {
   color: #211a16;
 }
-
 
 /* NAV LINKS */
 
@@ -88,7 +89,6 @@ body {
   color: #8c4f16;
 }
 
-
 /* NAV BUTTON */
 
 .nav-button {
@@ -109,7 +109,6 @@ body {
   transform: translateY(-1px);
 }
 
-
 /* =========================
    FOOTER
 ========================= */
@@ -128,7 +127,6 @@ body {
   gap: 30px;
 }
 
-
 /* FOOTER LOGO */
 
 .footer-logo {
@@ -145,7 +143,6 @@ body {
   color: #d8c3b5;
   font-size: 14px;
 }
-
 
 /* FOOTER LINKS */
 
@@ -165,7 +162,6 @@ body {
   color: #ffffff;
 }
 
-
 /* COPYRIGHT */
 
 .copyright {
@@ -176,13 +172,11 @@ body {
   font-size: 12px;
 }
 
-
 /* =========================
    MOBILE
 ========================= */
 
 @media (max-width: 768px) {
-
   .nav {
     height: 65px;
   }
