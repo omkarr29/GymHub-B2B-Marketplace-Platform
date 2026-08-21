@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { Users, Factory, Package, ShoppingCart, Pin } from 'lucide-react';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -18,10 +19,10 @@ const cardVariants = {
 
 const AdminDashboard = () => {
   const stats = [
-    { title: 'Total Customers', value: '1,248', icon: '👥', change: '+12% from last month' },
-    { title: 'Total Suppliers', value: '86', icon: '🏭', change: '+5 new this week' },
-    { title: 'Total Products', value: '542', icon: '📦', change: '+28 added recently' },
-    { title: 'Total Orders', value: '324', icon: '🛒', change: '+18% growth' }
+    { title: 'Total Customers', value: '1,248', icon: Users, change: '+12% from last month' },
+    { title: 'Total Suppliers', value: '86', icon: Factory, change: '+5 new this week' },
+    { title: 'Total Products', value: '542', icon: Package, change: '+28 added recently' },
+    { title: 'Total Orders', value: '324', icon: ShoppingCart, change: '+18% growth' }
   ];
 
   const pendingActions = [
@@ -106,7 +107,7 @@ const AdminDashboard = () => {
           >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <span style={{ fontSize: '14px', color: '#534439', fontWeight: '500' }}>{item.title}</span>
-              <span style={{ fontSize: '20px' }}>{item.icon}</span>
+              <item.icon size={20} strokeWidth={2} color="#8c4f16" />
             </div>
             <div style={{ fontSize: '28px', fontWeight: '700', color: '#8c4f16' }}>{item.value}</div>
             <span style={{ fontSize: '12px', color: '#79573d' }}>{item.change}</span>
@@ -245,7 +246,7 @@ const AdminDashboard = () => {
                   borderBottom: idx !== activities.length - 1 ? '1px solid #ede0d9' : 'none'
                 }}
               >
-                <span style={{ fontSize: '14px', marginTop: '2px' }}>📌</span>
+                <Pin size={14} strokeWidth={2} color="#8c4f16" style={{ marginTop: '2px', flexShrink: 0 }} />
                 <div style={{ flex: 1 }}>
                   <p style={{ margin: 0, fontSize: '13px', color: '#211a16', lineHeight: '18px' }}>
                     {item.text}

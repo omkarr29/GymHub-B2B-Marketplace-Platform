@@ -1,69 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-// --- Sub-components for Clean Code ---
-
-const StatCard = ({ title, value, subtitle, icon, bgColor, textColor }) => (
-  <div style={styles.statCard}>
-    <div>
-      <p style={styles.statTitle}>{title}</p>
-      <h3 style={styles.statValue}>{value}</h3>
-      <p style={styles.statSubtitle}>{subtitle}</p>
-    </div>
-    <div style={{ ...styles.statIconContainer, backgroundColor: bgColor, color: textColor }}>
-      {icon}
-    </div>
-  </div>
-);
-
-const QuickActionLink = ({ to, label, bg, text, border }) => (
-  <Link
-    to={to}
-    style={{
-      ...styles.quickActionBtn,
-      backgroundColor: bg,
-      color: text,
-      border: border ? `1px solid ${border}` : 'none',
-    }}
-  >
-    {label}
-  </Link>
-);
-
-const ProductCard = ({ product }) => (
-  <div style={styles.productCard}>
-    <div>
-      <div style={styles.productImageContainer}>
-        <img src={product.image} alt={product.name} style={styles.productImg} />
-        <span style={styles.productRatingBadge}>★ {product.rating}</span>
-      </div>
-      <div style={styles.productMetaContainer}>
-        <span style={styles.productCategory}>{product.category}</span>
-        <h4 style={styles.productName}>{product.name}</h4>
-        <p style={styles.productSupplier}>By {product.supplier}</p>
-      </div>
-    </div>
-
-    <div style={styles.productFooter}>
-      <div style={styles.productPricingRow}>
-        <span style={styles.productPrice}>₹{product.price.toLocaleString('en-IN')}</span>
-        <span style={styles.productStock}>{product.stock}</span>
-      </div>
-      <Link to={`/customer/product/${product.id}`} style={styles.productActionLink}>
-        View Quotation & Specs
-      </Link>
-    </div>
-  </div>
-);
-
-const OrderStatusBadge = ({ status, color, bg }) => (
-  <span style={{ ...styles.statusBadge, color, backgroundColor: bg }}>
-    {status}
-  </span>
-);
-
-// --- Main Dashboard Component ---
-
 const CustomerDashboard = () => {
   const iconStyle = {
     width: '24px',
@@ -73,6 +10,7 @@ const CustomerDashboard = () => {
     display: 'inline-block',
   };
 
+  // Realistic B2B Dummy Data
   const stats = [
     {
       title: 'Total Orders',
@@ -127,7 +65,7 @@ const CustomerDashboard = () => {
   const quickActions = [
     { label: 'Browse Products', path: '/customer/products', bg: '#8c4f16', text: '#ffffff' },
     { label: 'Track Orders', path: '/customer/orders', bg: '#fff1e9', text: '#8c4f16', border: '#d8c3b5' },
-    { label: 'AI Equipment Advisor', path: '/customer/ai-assistant', bg: '#00687a', text: '#ffffff' },
+    { label: 'View Cart', path: '/customer/cart', bg: '#00687a', text: '#ffffff' },
     { label: 'Business Profile', path: '/customer/profile', bg: '#fff1e9', text: '#534439', border: '#d8c3b5' },
   ];
 
@@ -208,86 +146,297 @@ const CustomerDashboard = () => {
   ];
 
   return (
-    <div style={styles.pageContainer}>
+    <div style={{ padding: '24px', backgroundColor: '#fff8f5', minHeight: '100%', boxSizing: 'border-box', display: 'flex', flexDirection: 'column', gap: '28px' }}>
       {/* Welcome Banner */}
-      <div style={styles.welcomeBanner}>
-        <span style={styles.verifiedTag}>Verified Gym Owner</span>
-        <h1 style={styles.welcomeTitle}>Welcome back, Metro Fitness</h1>
-        <p style={styles.welcomeDesc}>
+      <div
+        style={{
+          padding: '28px',
+          borderRadius: '16px',
+          backgroundColor: '#fff1e9',
+          border: '1px solid #d8c3b5',
+          boxSizing: 'border-box',
+        }}
+      >
+        <span
+          style={{
+            display: 'inline-block',
+            padding: '4px 12px',
+            marginBottom: '12px',
+            fontSize: '11px',
+            fontWeight: '700',
+            textTransform: 'uppercase',
+            letterSpacing: '0.05em',
+            borderRadius: '9999px',
+            backgroundColor: '#fed1b0',
+            color: '#79573d',
+          }}
+        >
+          Verified Gym Owner
+        </span>
+        <h1 style={{ margin: 0, fontSize: '24px', fontWeight: '700', color: '#211a16' }}>
+          Welcome back, Metro Fitness
+        </h1>
+        <p style={{ margin: '8px 0 0 0', fontSize: '14px', color: '#534439', maxWidth: '640px', lineHeight: '1.5' }}>
           Manage commercial equipment sourcing, track bulk dispatches, and get direct quotation deals from certified manufacturers.
         </p>
 
-        <div style={styles.quickActionsContainer}>
+        {/* Action Buttons */}
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', marginTop: '18px' }}>
           {quickActions.map((action, idx) => (
-            <QuickActionLink key={idx} to={action.path} label={action.label} bg={action.bg} text={action.text} border={action.border} />
+            <Link
+              key={idx}
+              to={action.path}
+              style={{
+                padding: '8px 16px',
+                fontSize: '13px',
+                fontWeight: '600',
+                borderRadius: '8px',
+                textDecoration: 'none',
+                backgroundColor: action.bg,
+                color: action.text,
+                border: action.border ? `1px solid ${action.border}` : 'none',
+                boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
+              }}
+            >
+              {action.label}
+            </Link>
           ))}
         </div>
       </div>
 
       {/* Quick Stats Grid */}
-      <div style={styles.statsGrid}>
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+          gap: '16px',
+        }}
+      >
         {stats.map((stat, idx) => (
-          <StatCard key={idx} {...stat} />
+          <div
+            key={idx}
+            style={{
+              padding: '18px',
+              borderRadius: '12px',
+              backgroundColor: '#ffffff',
+              border: '1px solid #ede0d9',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+            }}
+          >
+            <div>
+              <p style={{ margin: 0, fontSize: '11px', fontWeight: '700', textTransform: 'uppercase', color: '#79573d' }}>
+                {stat.title}
+              </p>
+              <h3 style={{ margin: '4px 0 0 0', fontSize: '22px', fontWeight: '800', color: '#211a16' }}>
+                {stat.value}
+              </h3>
+              <p style={{ margin: '2px 0 0 0', fontSize: '11px', color: '#857468' }}>
+                {stat.subtitle}
+              </p>
+            </div>
+            <div
+              style={{
+                padding: '10px',
+                borderRadius: '10px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                backgroundColor: stat.bgColor,
+                color: stat.textColor,
+                flexShrink: 0,
+              }}
+            >
+              {stat.icon}
+            </div>
+          </div>
         ))}
       </div>
 
       {/* Recommended B2B Products */}
-      <div style={styles.sectionBlock}>
-        <div style={styles.sectionHeader}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px' }}>
           <div>
-            <h2 style={styles.sectionHeading}>Recommended for Your Gym</h2>
-            <p style={styles.sectionSubtext}>Commercial grade equipment with factory wholesale rates</p>
+            <h2 style={{ margin: 0, fontSize: '18px', fontWeight: '700', color: '#211a16' }}>
+              Recommended for Your Gym
+            </h2>
+            <p style={{ margin: '2px 0 0 0', fontSize: '12px', color: '#79573d' }}>
+              Commercial grade equipment with factory wholesale rates
+            </p>
           </div>
-          <Link to="/customer/products" style={styles.viewAllLink}>
+          <Link
+            to="/customer/products"
+            style={{ fontSize: '13px', fontWeight: '600', color: '#8c4f16', textDecoration: 'none' }}
+          >
             View Full Catalog &rarr;
           </Link>
         </div>
 
-        <div style={styles.productGrid}>
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))',
+            gap: '16px',
+          }}
+        >
           {recommendedProducts.map((product) => (
-            <ProductCard key={product.id} product={product} />
+            <div
+              key={product.id}
+              style={{
+                borderRadius: '12px',
+                border: '1px solid #ede0d9',
+                backgroundColor: '#ffffff',
+                overflow: 'hidden',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+              }}
+            >
+              <div>
+                <div style={{ height: '150px', position: 'relative', overflow: 'hidden', backgroundColor: '#ede0d9' }}>
+                  <img
+                    src={product.image}
+                    alt={product.name}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                  />
+                  <span
+                    style={{
+                      position: 'absolute',
+                      top: '8px',
+                      right: '8px',
+                      fontSize: '11px',
+                      fontWeight: '700',
+                      padding: '2px 8px',
+                      borderRadius: '9999px',
+                      backgroundColor: '#fff1e9',
+                      color: '#8c4f16',
+                    }}
+                  >
+                    ★ {product.rating}
+                  </span>
+                </div>
+                <div style={{ padding: '12px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                  <span style={{ fontSize: '10px', fontWeight: '700', textTransform: 'uppercase', color: '#00687a' }}>
+                    {product.category}
+                  </span>
+                  <h4 style={{ margin: 0, fontSize: '13px', fontWeight: '600', color: '#211a16', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                    {product.name}
+                  </h4>
+                  <p style={{ margin: 0, fontSize: '11px', color: '#79573d' }}>
+                    By {product.supplier}
+                  </p>
+                </div>
+              </div>
+
+              <div style={{ padding: '12px', paddingTop: 0, display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <span style={{ fontSize: '15px', fontWeight: '700', color: '#8c4f16' }}>
+                    ₹{product.price.toLocaleString('en-IN')}
+                  </span>
+                  <span style={{ fontSize: '10px', fontWeight: '600', color: '#15803d', backgroundColor: '#dcfce7', padding: '2px 6px', borderRadius: '4px' }}>
+                    {product.stock}
+                  </span>
+                </div>
+                <Link
+                  to={`/customer/product/${product.id}`}
+                  style={{
+                    display: 'block',
+                    textAlign: 'center',
+                    padding: '8px',
+                    fontSize: '12px',
+                    fontWeight: '600',
+                    borderRadius: '6px',
+                    textDecoration: 'none',
+                    backgroundColor: '#fff1e9',
+                    color: '#8c4f16',
+                    border: '1px solid #d8c3b5',
+                  }}
+                >
+                  View Quotation & Specs
+                </Link>
+              </div>
+            </div>
           ))}
         </div>
       </div>
 
       {/* Recent Orders Section */}
-      <div style={styles.recentOrdersCard}>
-        <div style={styles.sectionHeader}>
+      <div
+        style={{
+          borderRadius: '16px',
+          border: '1px solid #ede0d9',
+          backgroundColor: '#ffffff',
+          padding: '20px',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '14px',
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div>
-            <h2 style={styles.sectionHeading}>Recent Sourcing Orders</h2>
-            <p style={styles.sectionSubtext}>Latest supplier shipments and status updates</p>
+            <h2 style={{ margin: 0, fontSize: '16px', fontWeight: '700', color: '#211a16' }}>
+              Recent Sourcing Orders
+            </h2>
+            <p style={{ margin: '2px 0 0 0', fontSize: '12px', color: '#79573d' }}>
+              Latest supplier shipments and status updates
+            </p>
           </div>
-          <Link to="/customer/orders" style={styles.viewAllLink}>
+          <Link
+            to="/customer/orders"
+            style={{ fontSize: '12px', fontWeight: '600', color: '#8c4f16', textDecoration: 'none' }}
+          >
             All Orders ({stats[0].value}) &rarr;
           </Link>
         </div>
 
-        <div style={styles.tableWrapper}>
-          <table style={styles.table}>
+        <div style={{ overflowX: 'auto' }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '13px' }}>
             <thead>
-              <tr style={styles.tableHeaderRow}>
-                <th style={{ ...styles.tableHeaderTh, borderRadius: '6px 0 0 6px' }}>Order ID</th>
-                <th style={styles.tableHeaderTh}>Equipment / Product</th>
-                <th style={styles.tableHeaderTh}>Supplier</th>
-                <th style={styles.tableHeaderTh}>Amount</th>
-                <th style={styles.tableHeaderTh}>Status</th>
-                <th style={styles.tableHeaderTh}>Date</th>
-                <th style={{ ...styles.tableHeaderTh, textAlign: 'right', borderRadius: '0 6px 6px 0' }}>Action</th>
+              <tr style={{ backgroundColor: '#fff1e9', color: '#534439' }}>
+                <th style={{ padding: '10px 12px', fontWeight: '600', borderRadius: '6px 0 0 6px' }}>Order ID</th>
+                <th style={{ padding: '10px 12px', fontWeight: '600' }}>Equipment / Product</th>
+                <th style={{ padding: '10px 12px', fontWeight: '600' }}>Supplier</th>
+                <th style={{ padding: '10px 12px', fontWeight: '600' }}>Amount</th>
+                <th style={{ padding: '10px 12px', fontWeight: '600' }}>Status</th>
+                <th style={{ padding: '10px 12px', fontWeight: '600' }}>Date</th>
+                <th style={{ padding: '10px 12px', fontWeight: '600', textAlign: 'right', borderRadius: '0 6px 6px 0' }}>Action</th>
               </tr>
             </thead>
             <tbody>
               {recentOrders.map((order, idx) => (
-                <tr key={order.id} style={{ borderBottom: idx !== recentOrders.length - 1 ? '1px solid #ede0d9' : 'none' }}>
-                  <td style={styles.tdBold}>{order.id}</td>
-                  <td style={styles.tdProduct}>{order.product}</td>
-                  <td style={styles.tdSupplier}>{order.supplier}</td>
-                  <td style={styles.tdAmount}>{order.amount}</td>
-                  <td style={styles.tdCell}>
-                    <OrderStatusBadge status={order.status} color={order.statusColor} bg={order.statusBg} />
+                <tr
+                  key={order.id}
+                  style={{
+                    borderBottom: idx !== recentOrders.length - 1 ? '1px solid #ede0d9' : 'none',
+                  }}
+                >
+                  <td style={{ padding: '12px', fontWeight: '700', color: '#211a16' }}>{order.id}</td>
+                  <td style={{ padding: '12px', fontWeight: '500', color: '#211a16', maxWidth: '220px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                    {order.product}
                   </td>
-                  <td style={styles.tdDate}>{order.date}</td>
-                  <td style={styles.tdAction}>
-                    <Link to={`/customer/orders/${order.id}`} style={styles.tdDetailLink}>
+                  <td style={{ padding: '12px', color: '#79573d' }}>{order.supplier}</td>
+                  <td style={{ padding: '12px', fontWeight: '700', color: '#8c4f16' }}>{order.amount}</td>
+                  <td style={{ padding: '12px' }}>
+                    <span
+                      style={{
+                        padding: '3px 8px',
+                        fontSize: '11px',
+                        fontWeight: '600',
+                        borderRadius: '9999px',
+                        color: order.statusColor,
+                        backgroundColor: order.statusBg,
+                      }}
+                    >
+                      {order.status}
+                    </span>
+                  </td>
+                  <td style={{ padding: '12px', fontSize: '12px', color: '#857468' }}>{order.date}</td>
+                  <td style={{ padding: '12px', textAlign: 'right' }}>
+                    <Link
+                      to={`/customer/orders/${order.id}`}
+                      style={{ fontSize: '12px', fontWeight: '600', color: '#00687a', textDecoration: 'none' }}
+                    >
                       Details &rarr;
                     </Link>
                   </td>
@@ -299,308 +448,6 @@ const CustomerDashboard = () => {
       </div>
     </div>
   );
-};
-
-// ==========================================
-// STYLES OBJECT
-// ==========================================
-const styles = {
-  pageContainer: {
-    padding: '24px',
-    backgroundColor: '#fff8f5',
-    minHeight: '100%',
-    boxSizing: 'border-box',
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '28px',
-  },
-  welcomeBanner: {
-    padding: '28px',
-    borderRadius: '16px',
-    backgroundColor: '#fff1e9',
-    border: '1px solid #d8c3b5',
-    boxSizing: 'border-box',
-  },
-  verifiedTag: {
-    display: 'inline-block',
-    padding: '4px 12px',
-    marginBottom: '12px',
-    fontSize: '11px',
-    fontWeight: '700',
-    textTransform: 'uppercase',
-    letterSpacing: '0.05em',
-    borderRadius: '9999px',
-    backgroundColor: '#fed1b0',
-    color: '#79573d',
-  },
-  welcomeTitle: {
-    margin: 0,
-    fontSize: '24px',
-    fontWeight: '700',
-    color: '#211a16',
-  },
-  welcomeDesc: {
-    margin: '8px 0 0 0',
-    fontSize: '14px',
-    color: '#534439',
-    maxWidth: '640px',
-    lineHeight: '1.5',
-  },
-  quickActionsContainer: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    gap: '10px',
-    marginTop: '18px',
-  },
-  quickActionBtn: {
-    padding: '8px 16px',
-    fontSize: '13px',
-    fontWeight: '600',
-    borderRadius: '8px',
-    textDecoration: 'none',
-    boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
-  },
-  statsGrid: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-    gap: '16px',
-  },
-  statCard: {
-    padding: '18px',
-    borderRadius: '12px',
-    backgroundColor: '#ffffff',
-    border: '1px solid #ede0d9',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  statTitle: {
-    margin: 0,
-    fontSize: '11px',
-    fontWeight: '700',
-    textTransform: 'uppercase',
-    color: '#79573d',
-  },
-  statValue: {
-    margin: '4px 0 0 0',
-    fontSize: '22px',
-    fontWeight: '800',
-    color: '#211a16',
-  },
-  statSubtitle: {
-    margin: '2px 0 0 0',
-    fontSize: '11px',
-    color: '#857468',
-  },
-  statIconContainer: {
-    padding: '10px',
-    borderRadius: '10px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexShrink: 0,
-  },
-  sectionBlock: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '14px',
-  },
-  sectionHeader: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    flexWrap: 'wrap',
-    gap: '8px',
-  },
-  sectionHeading: {
-    margin: 0,
-    fontSize: '18px',
-    fontWeight: '700',
-    color: '#211a16',
-  },
-  sectionSubtext: {
-    margin: '2px 0 0 0',
-    fontSize: '12px',
-    color: '#79573d',
-  },
-  viewAllLink: {
-    fontSize: '13px',
-    fontWeight: '600',
-    color: '#8c4f16',
-    textDecoration: 'none',
-  },
-  productGrid: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))',
-    gap: '16px',
-  },
-  productCard: {
-    borderRadius: '12px',
-    border: '1px solid #ede0d9',
-    backgroundColor: '#ffffff',
-    overflow: 'hidden',
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-  },
-  productImageContainer: {
-    height: '150px',
-    position: 'relative',
-    overflow: 'hidden',
-    backgroundColor: '#ede0d9',
-  },
-  productImg: {
-    width: '100%',
-    height: '100%',
-    objectFit: 'cover',
-  },
-  productRatingBadge: {
-    position: 'absolute',
-    top: '8px',
-    right: '8px',
-    fontSize: '11px',
-    fontWeight: '700',
-    padding: '2px 8px',
-    borderRadius: '9999px',
-    backgroundColor: '#fff1e9',
-    color: '#8c4f16',
-  },
-  productMetaContainer: {
-    padding: '12px',
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '4px',
-  },
-  productCategory: {
-    fontSize: '10px',
-    fontWeight: '700',
-    textTransform: 'uppercase',
-    color: '#00687a',
-  },
-  productName: {
-    margin: 0,
-    fontSize: '13px',
-    fontWeight: '600',
-    color: '#211a16',
-    whiteSpace: 'nowrap',
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-  },
-  productSupplier: {
-    margin: 0,
-    fontSize: '11px',
-    color: '#79573d',
-  },
-  productFooter: {
-    padding: '12px',
-    paddingTop: 0,
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '8px',
-  },
-  productPricingRow: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  productPrice: {
-    fontSize: '15px',
-    fontWeight: '700',
-    color: '#8c4f16',
-  },
-  productStock: {
-    fontSize: '10px',
-    fontWeight: '600',
-    color: '#15803d',
-    backgroundColor: '#dcfce7',
-    padding: '2px 6px',
-    borderRadius: '4px',
-  },
-  productActionLink: {
-    display: 'block',
-    textAlign: 'center',
-    padding: '8px',
-    fontSize: '12px',
-    fontWeight: '600',
-    borderRadius: '6px',
-    textDecoration: 'none',
-    backgroundColor: '#fff1e9',
-    color: '#8c4f16',
-    border: '1px solid #d8c3b5',
-  },
-  recentOrdersCard: {
-    borderRadius: '16px',
-    border: '1px solid #ede0d9',
-    backgroundColor: '#ffffff',
-    padding: '20px',
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '14px',
-  },
-  tableWrapper: {
-    overflowX: 'auto',
-  },
-  table: {
-    width: '100%',
-    borderCollapse: 'collapse',
-    textAlign: 'left',
-    fontSize: '13px',
-  },
-  tableHeaderRow: {
-    backgroundColor: '#fff1e9',
-    color: '#534439',
-  },
-  tableHeaderTh: {
-    padding: '10px 12px',
-    fontWeight: '600',
-  },
-  tdBold: {
-    padding: '12px',
-    fontWeight: '700',
-    color: '#211a16',
-  },
-  tdProduct: {
-    padding: '12px',
-    fontWeight: '500',
-    color: '#211a16',
-    maxWidth: '220px',
-    whiteSpace: 'nowrap',
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-  },
-  tdSupplier: {
-    padding: '12px',
-    color: '#79573d',
-  },
-  tdAmount: {
-    padding: '12px',
-    fontWeight: '700',
-    color: '#8c4f16',
-  },
-  tdCell: {
-    padding: '12px',
-  },
-  tdDate: {
-    padding: '12px',
-    fontSize: '12px',
-    color: '#857468',
-  },
-  tdAction: {
-    padding: '12px',
-    textAlign: 'right',
-  },
-  tdDetailLink: {
-    fontSize: '12px',
-    fontWeight: '600',
-    color: '#00687a',
-    textDecoration: 'none',
-  },
-  statusBadge: {
-    padding: '3px 8px',
-    fontSize: '11px',
-    fontWeight: '600',
-    borderRadius: '9999px',
-  },
 };
 
 export default CustomerDashboard;

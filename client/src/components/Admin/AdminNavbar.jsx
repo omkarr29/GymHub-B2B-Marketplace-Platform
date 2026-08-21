@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Menu, Search, Bell } from 'lucide-react';
 
 const AdminNavbar = ({ toggleSidebar }) => {
   const [showProfileMenu, setShowProfileMenu] = useState(false);
@@ -37,7 +38,7 @@ const AdminNavbar = ({ toggleSidebar }) => {
           }}
           aria-label="Toggle navigation"
         >
-          ☰
+          <Menu size={20} strokeWidth={2} />
         </button>
 
         {/* Global Search Input */}
@@ -63,11 +64,11 @@ const AdminNavbar = ({ toggleSidebar }) => {
               left: '12px',
               top: '50%',
               transform: 'translateY(-50%)',
-              fontSize: '14px',
-              color: '#857468'
+              color: '#857468',
+              display: 'flex',
             }}
           >
-            🔍
+            <Search size={15} strokeWidth={2} />
           </span>
         </div>
       </div>
@@ -75,8 +76,8 @@ const AdminNavbar = ({ toggleSidebar }) => {
       {/* Right: Notification & Profile */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
         {/* Notifications Icon with Badge */}
-        <div style={{ position: 'relative', cursor: 'pointer' }}>
-          <span style={{ fontSize: '20px' }}>🔔</span>
+        <div style={{ position: 'relative', cursor: 'pointer', display: 'flex' }}>
+          <Bell size={20} strokeWidth={2} color="#211a16" />
           <span
             style={{
               position: 'absolute',

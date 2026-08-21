@@ -1,259 +1,307 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { Link, useNavigate } from 'react-router-dom';
+import { Menu, Search, PlusCircle, Bell, ChevronDown } from 'lucide-react';
 
-const SupplierNavbar = ({ toggleSidebar }) => {
+/**
+ * SupplierNavbar Component
+ * Top header navigation bar for the Supplier Module.
+ *
+ * Props:
+ * - onToggleSidebar (function): Toggles mobile sidebar drawer.
+ * - unreadNotificationsCount (number): Number of unread alerts (default 3).
+ */
+const SupplierNavbar = ({
+  onToggleSidebar = () => {},
+  unreadNotificationsCount = 3,
+}) => {
+  const [searchQuery, setSearchQuery] = useState('');
   const [showProfileMenu, setShowProfileMenu] = useState(false);
+  const navigate = useNavigate();
 
-  // Supplier identity state
-  const supplierInfo = {
-    name: 'Rajesh Sharma',
-    businessName: 'FitEquip Manufacturing Pvt Ltd',
-    isVerified: true,
-    initials: 'FE'
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/supplier/products?search=${encodeURIComponent(searchQuery.trim())}`);
+    }
   };
 
   return (
     <header
       style={{
-        height: '64px',
-        backgroundColor: '#fff8f5',
-        borderBottom: '1px solid #d8c3b5',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        padding: '0 24px',
         position: 'sticky',
         top: 0,
         zIndex: 30,
-        boxSizing: 'border-box'
+        height: '64px',
+        backgroundColor: '#fff8f5',
+        borderBottom: '1px solid #ede0d9',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        padding: '0 20px',
+        boxSizing: 'border-box',
       }}
     >
-      {/* Left: Mobile Toggle & Global Supplier Search */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flex: 1 }}>
+      {/* Left Section: Mobile Menu Button & Business Info */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
         <button
-          onClick={toggleSidebar}
+          type="button"
+          onClick={onToggleSidebar}
+          aria-label="Toggle Navigation Menu"
           style={{
-            display: 'inline-flex',
+            background: 'none',
+            border: 'none',
+            cursor: 'pointer',
+            padding: '6px',
+            borderRadius: '6px',
+            color: '#534439',
+            display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            background: 'transparent',
-            border: 'none',
-            fontSize: '20px',
-            cursor: 'pointer',
-            padding: '4px',
-            color: '#211a16'
           }}
-          aria-label="Toggle Navigation"
         >
-          ☰
+          <Menu size={22} strokeWidth={2} />
         </button>
 
-        <div style={{ position: 'relative', width: '100%', maxWidth: '380px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column' }}>
+          <p style={{ margin: 0, fontSize: '14px', fontWeight: '700', color: '#211a16' }}>
+            FitPro Industrial Ltd
+          </p>
+          <p style={{ margin: 0, fontSize: '11px', color: '#00687a' }}>
+            Supplier / Manufacturer Portal
+          </p>
+        </div>
+      </div>
+
+      {/* Center Section: Global Search Bar */}
+      <div style={{ flex: 1, maxWidth: '420px', margin: '0 16px' }}>
+        <form onSubmit={handleSearchSubmit} style={{ position: 'relative', width: '100%' }}>
+          <span
+            style={{
+              position: 'absolute',
+              top: '50%',
+              left: '12px',
+              transform: 'translateY(-50%)',
+              color: '#857468',
+              display: 'flex',
+              alignItems: 'center',
+              pointerEvents: 'none',
+            }}
+          >
+            <Search size={16} strokeWidth={2} />
+          </span>
           <input
             type="text"
-            placeholder="Search SKU, products, orders, buyers..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search your products, orders, buyers..."
             style={{
               width: '100%',
               padding: '8px 12px 8px 36px',
+              fontSize: '13px',
               borderRadius: '8px',
               border: '1px solid #d8c3b5',
               backgroundColor: '#fff1e9',
               color: '#211a16',
-              fontSize: '13px',
               outline: 'none',
-              boxSizing: 'border-box'
+              boxSizing: 'border-box',
             }}
           />
-          <span
-            style={{
-              position: 'absolute',
-              left: '12px',
-              top: '50%',
-              transform: 'translateY(-50%)',
-              fontSize: '13px',
-              color: '#857468'
-            }}
-          >
-            🔍
-          </span>
-        </div>
+        </form>
       </div>
 
-      {/* Right: Verified Badge, Notifications, and Profile */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '18px' }}>
-        {/* Verification Status Pill */}
-        {supplierInfo.isVerified ? (
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '4px',
-              padding: '4px 10px',
-              backgroundColor: '#e6f4ea',
-              border: '1px solid #ceead6',
-              borderRadius: '9999px',
-              color: '#137333',
-              fontSize: '11px',
-              fontWeight: '600'
-            }}
-          >
-            <span>✓</span>
-            <span>Verified Supplier</span>
-          </div>
-        ) : (
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '4px',
-              padding: '4px 10px',
-              backgroundColor: '#fed1b0',
-              border: '1px solid #d8c3b5',
-              borderRadius: '9999px',
-              color: '#79573d',
-              fontSize: '11px',
-              fontWeight: '600'
-            }}
-          >
-            <span>⏳</span>
-            <span>KYC Pending</span>
-          </div>
-        )}
-
-        {/* Notifications Icon with Badge */}
-        <a
-          href="/supplier/notifications"
-          style={{ position: 'relative', cursor: 'pointer', textDecoration: 'none', color: 'inherit' }}
+      {/* Right Section: Add Product, Notifications & Profile Menu */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+        {/* Quick Add Product */}
+        <Link
+          to="/supplier/products/add"
+          title="Add Product"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '8px',
+            borderRadius: '8px',
+            color: '#534439',
+            textDecoration: 'none',
+          }}
         >
-          <span style={{ fontSize: '18px' }}>🔔</span>
-          <span
-            style={{
-              position: 'absolute',
-              top: '-4px',
-              right: '-4px',
-              backgroundColor: '#ba1a1a',
-              color: '#ffffff',
-              fontSize: '10px',
-              fontWeight: '700',
-              borderRadius: '9999px',
-              width: '16px',
-              height: '16px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center'
-            }}
-          >
-            3
-          </span>
-        </a>
+          <PlusCircle size={22} strokeWidth={2} />
+        </Link>
 
-        {/* Supplier Profile Trigger & Dropdown */}
+        {/* Notifications Link */}
+        <Link
+          to="/supplier/notifications"
+          title="Notifications"
+          style={{
+            position: 'relative',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '8px',
+            borderRadius: '8px',
+            color: '#534439',
+            textDecoration: 'none',
+          }}
+        >
+          <Bell size={22} strokeWidth={2} />
+          {unreadNotificationsCount > 0 && (
+            <span
+              style={{
+                position: 'absolute',
+                top: '4px',
+                right: '4px',
+                width: '8px',
+                height: '8px',
+                backgroundColor: '#ba1a1a',
+                borderRadius: '50%',
+                border: '2px solid #ffffff',
+              }}
+            />
+          )}
+        </Link>
+
+        {/* Profile Dropdown Toggle */}
         <div style={{ position: 'relative' }}>
           <button
+            type="button"
             onClick={() => setShowProfileMenu(!showProfileMenu)}
             style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '10px',
-              background: 'transparent',
+              background: 'none',
               border: 'none',
               cursor: 'pointer',
-              padding: '4px 8px',
-              borderRadius: '8px'
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              padding: '4px',
+              borderRadius: '8px',
             }}
           >
             <div
               style={{
                 width: '32px',
                 height: '32px',
-                borderRadius: '9999px',
-                backgroundColor: '#8c4f16',
+                minWidth: '32px',
+                borderRadius: '50%',
+                backgroundColor: '#57b3ca',
                 color: '#ffffff',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                fontWeight: '600',
-                fontSize: '13px'
+                fontSize: '12px',
+                fontWeight: '700',
               }}
             >
-              {supplierInfo.initials}
+              FP
             </div>
-            <div style={{ textAlign: 'left', display: 'flex', flexDirection: 'column' }}>
-              <span style={{ fontSize: '13px', fontWeight: '600', color: '#211a16' }}>
-                {supplierInfo.name}
-              </span>
-              <span style={{ fontSize: '11px', color: '#79573d' }}>
-                {supplierInfo.businessName}
-              </span>
-            </div>
-            <span style={{ fontSize: '10px', color: '#534439' }}>▼</span>
+            <ChevronDown
+              size={16}
+              strokeWidth={2}
+              color="#534439"
+              style={{
+                transform: showProfileMenu ? 'rotate(180deg)' : 'rotate(0deg)',
+                transition: 'transform 0.2s ease',
+              }}
+            />
           </button>
 
-          {/* Dropdown Menu */}
-          <AnimatePresence>
-            {showProfileMenu && (
-              <motion.div
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 8 }}
-                transition={{ duration: 0.15 }}
+          {/* Profile Dropdown Menu */}
+          {showProfileMenu && (
+            <>
+              <div
+                onClick={() => setShowProfileMenu(false)}
+                style={{ position: 'fixed', inset: 0, zIndex: 10 }}
+              />
+              <div
                 style={{
                   position: 'absolute',
                   right: 0,
-                  top: '46px',
-                  backgroundColor: '#fff8f5',
+                  top: '42px',
+                  width: '210px',
+                  backgroundColor: '#ffffff',
                   border: '1px solid #d8c3b5',
-                  borderRadius: '8px',
-                  width: '180px',
-                  boxShadow: '0 6px 18px rgba(33, 26, 22, 0.1)',
-                  padding: '6px 0',
-                  zIndex: 50
+                  borderRadius: '10px',
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                  zIndex: 20,
+                  overflow: 'hidden',
                 }}
               >
-                <a
-                  href="/supplier/profile"
+                <div style={{ padding: '10px 14px', borderBottom: '1px solid #ede0d9', backgroundColor: '#fff1e9' }}>
+                  <p style={{ margin: 0, fontSize: '12px', fontWeight: '700', color: '#211a16' }}>
+                    FitPro Industrial Ltd
+                  </p>
+                  <p style={{ margin: 0, fontSize: '10px', color: '#00687a' }}>
+                    GST: 27AAFCF5678L1ZQ
+                  </p>
+                </div>
+
+                <Link
+                  to="/supplier/profile"
+                  onClick={() => setShowProfileMenu(false)}
                   style={{
                     display: 'block',
-                    padding: '8px 16px',
-                    fontSize: '13px',
+                    padding: '9px 14px',
+                    fontSize: '12px',
                     color: '#211a16',
-                    textDecoration: 'none'
+                    textDecoration: 'none',
+                    borderBottom: '1px solid #f9ebe4',
                   }}
                 >
-                  🛡️ Business Profile
-                </a>
-                <a
-                  href="/supplier/settings"
+                  Business Profile
+                </Link>
+
+                <Link
+                  to="/supplier/orders"
+                  onClick={() => setShowProfileMenu(false)}
                   style={{
                     display: 'block',
-                    padding: '8px 16px',
-                    fontSize: '13px',
+                    padding: '9px 14px',
+                    fontSize: '12px',
                     color: '#211a16',
-                    textDecoration: 'none'
+                    textDecoration: 'none',
+                    borderBottom: '1px solid #f9ebe4',
                   }}
                 >
-                  ⚙️ Settings
-                </a>
-                <div style={{ borderTop: '1px solid #ede0d9', margin: '4px 0' }} />
+                  Order History
+                </Link>
+
+                <Link
+                  to="/supplier/notifications"
+                  onClick={() => setShowProfileMenu(false)}
+                  style={{
+                    display: 'block',
+                    padding: '9px 14px',
+                    fontSize: '12px',
+                    color: '#211a16',
+                    textDecoration: 'none',
+                    borderBottom: '1px solid #f9ebe4',
+                  }}
+                >
+                  Notifications
+                </Link>
+
                 <button
-                  onClick={() => alert('Supplier logged out.')}
+                  type="button"
+                  onClick={() => {
+                    setShowProfileMenu(false);
+                    window.location.href = '/';
+                  }}
                   style={{
                     width: '100%',
                     textAlign: 'left',
-                    padding: '8px 16px',
-                    fontSize: '13px',
+                    padding: '9px 14px',
+                    fontSize: '12px',
                     color: '#ba1a1a',
                     background: 'none',
                     border: 'none',
                     cursor: 'pointer',
-                    fontWeight: '600'
+                    fontWeight: '600',
                   }}
                 >
-                  🚪 Logout
+                  Log out
                 </button>
-              </motion.div>
-            )}
-          </AnimatePresence>
+              </div>
+            </>
+          )}
         </div>
       </div>
     </header>

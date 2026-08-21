@@ -1,6 +1,66 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import logo from '../assets/GymHub.png';
+import { Link } from 'react-router-dom';
+import logo from '../../assets/GymHub.png';
+
+// Motion-enabled Link so internal navigation gets client-side routing
+// (no full page reload) while keeping the existing hover/tap animations.
+const MotionLink = motion.create(Link);
+
+// Marketplace categories shown in the "Marketplace Categories" section.
+// Mirrors the category list used in BrowseProducts.jsx.
+const marketplaceCategories = [
+  { name: 'Cardio Equipment', icon: '🏃', desc: 'Treadmills, rowers, ellipticals' },
+  { name: 'Strength Equipment', icon: '🏋️', desc: 'Racks, benches, cable stations' },
+  { name: 'Free Weights', icon: '🔩', desc: 'Dumbbells, barbells, plates' },
+  { name: 'Functional Training', icon: '⚡', desc: 'Battle ropes, kettlebells, rigs' },
+  { name: 'Gym Accessories', icon: '🎽', desc: 'Racks, mats, storage systems' },
+  { name: 'Recovery Equipment', icon: '🧊', desc: 'Massage guns, foam rollers' },
+  { name: 'Gym Flooring', icon: '⬛', desc: 'Rubber tiles, interlocking mats' },
+  { name: 'Commercial Gym Equipment', icon: '🏢', desc: 'Multi-stations, full setups' },
+];
+
+// A handful of featured listings pulled from the same catalog as
+// BrowseProducts.jsx, kept local here to avoid coupling the public
+// landing page to customer-module state.
+const featuredProducts = [
+  {
+    id: 'prod-1',
+    name: 'Commercial Motorized Treadmill X9',
+    category: 'Cardio Equipment',
+    supplier: 'FitPro Industrial Ltd',
+    price: 145000,
+    rating: 4.8,
+    image: 'https://images.unsplash.com/photo-1576678927484-cc907957088c?w=500&auto=format&fit=crop&q=60',
+  },
+  {
+    id: 'prod-5',
+    name: 'Commercial Power Rack with Cable Pulley',
+    category: 'Strength Equipment',
+    supplier: 'Titan Steel Fitness',
+    price: 115000,
+    rating: 4.8,
+    image: 'https://images.unsplash.com/photo-1584735935682-2f2b69dff9d2?w=500&auto=format&fit=crop&q=60',
+  },
+  {
+    id: 'prod-3',
+    name: 'Dual Cable Crossover Station Pro',
+    category: 'Commercial Gym Equipment',
+    supplier: 'Apex Fitness Gear',
+    price: 220000,
+    rating: 4.7,
+    image: 'https://images.unsplash.com/photo-1540497077202-7c8a3999166f?w=500&auto=format&fit=crop&q=60',
+  },
+  {
+    id: 'prod-4',
+    name: 'Commercial Rubber Flooring (1000 sq ft)',
+    category: 'Gym Flooring',
+    supplier: 'ToughTile Surfaces',
+    price: 85000,
+    rating: 4.9,
+    image: 'https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=500&auto=format&fit=crop&q=60',
+  },
+];
 
 // Animation Variants
 const fadeInUp = {
@@ -74,8 +134,8 @@ const LandingPage = () => {
           
           {/* Logo & Desktop Nav Links */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '36px' }}>
-            <motion.a 
-              href="/" 
+            <MotionLink 
+              to="/" 
               style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
@@ -85,24 +145,24 @@ const LandingPage = () => {
                 alt="GymHub Logo" 
                 style={{ height: '52px', width: 'auto', objectFit: 'contain', display: 'block' }} 
               />
-            </motion.a>
+            </MotionLink>
 
             <div className="nav-links" style={{ display: 'flex', gap: '28px', fontSize: '14px', fontWeight: 600, color: '#534439' }}>
+              <Link to="/customer/products" style={{ textDecoration: 'none', color: '#534439' }}>Marketplace</Link>
               <a href="#about" style={{ textDecoration: 'none', color: '#534439' }}>What is GymHub?</a>
               <a href="#how-it-works" style={{ textDecoration: 'none', color: '#534439' }}>Procurement Model</a>
-              <a href="#facilities" style={{ textDecoration: 'none', color: '#534439' }}>Facilities Served</a>
-              <a href="#solutions" style={{ textDecoration: 'none', color: '#534439' }}>Solutions</a>
+              <Link to="/supplier" style={{ textDecoration: 'none', color: '#534439' }}>For Suppliers</Link>
               <a href="#faq" style={{ textDecoration: 'none', color: '#534439' }}>FAQ</a>
             </div>
           </div>
 
           {/* Desktop Auth Buttons */}
           <div className="nav-actions" style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-            <a href="/login" style={{ fontSize: '14px', fontWeight: 600, color: '#211A16', textDecoration: 'none', padding: '8px 16px' }}>
+            <Link to="/customer" style={{ fontSize: '14px', fontWeight: 600, color: '#211A16', textDecoration: 'none', padding: '8px 16px' }}>
               Sign In
-            </a>
-            <motion.a 
-              href="/register" 
+            </Link>
+            <MotionLink 
+              to="/customer" 
               className="btn btn-primary"
               whileHover={{ scale: 1.05, backgroundColor: '#703e11' }}
               whileTap={{ scale: 0.95 }}
@@ -118,7 +178,7 @@ const LandingPage = () => {
               }}
             >
               Get Started
-            </motion.a>
+            </MotionLink>
           </div>
 
           {/* Mobile Hamburger Toggle */}
@@ -140,14 +200,15 @@ const LandingPage = () => {
               exit={{ opacity: 0, height: 0 }}
               style={{ backgroundColor: '#ffffff', borderTop: '1px solid #D8C3B5', padding: '20px 24px', display: 'flex', flexDirection: 'column', gap: '16px', overflow: 'hidden' }}
             >
+              <Link to="/customer/products" onClick={() => setIsMobileMenuOpen(false)} style={{ textDecoration: 'none', color: '#211A16', fontWeight: 600 }}>Marketplace</Link>
               <a href="#about" onClick={() => setIsMobileMenuOpen(false)} style={{ textDecoration: 'none', color: '#211A16', fontWeight: 600 }}>What is GymHub?</a>
               <a href="#how-it-works" onClick={() => setIsMobileMenuOpen(false)} style={{ textDecoration: 'none', color: '#211A16', fontWeight: 600 }}>Procurement Model</a>
               <a href="#facilities" onClick={() => setIsMobileMenuOpen(false)} style={{ textDecoration: 'none', color: '#211A16', fontWeight: 600 }}>Facilities Served</a>
-              <a href="#solutions" onClick={() => setIsMobileMenuOpen(false)} style={{ textDecoration: 'none', color: '#211A16', fontWeight: 600 }}>Solutions</a>
+              <Link to="/supplier" onClick={() => setIsMobileMenuOpen(false)} style={{ textDecoration: 'none', color: '#211A16', fontWeight: 600 }}>For Suppliers</Link>
               <a href="#faq" onClick={() => setIsMobileMenuOpen(false)} style={{ textDecoration: 'none', color: '#211A16', fontWeight: 600 }}>FAQ</a>
               <div style={{ borderTop: '1px solid #EDE0D9', paddingTop: '16px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                <a href="/login" style={{ textAlign: 'center', padding: '10px', borderRadius: '10px', border: '1px solid #D8C3B5', textDecoration: 'none', color: '#211A16', fontWeight: 600 }}>Sign In</a>
-                <a href="/register" style={{ textAlign: 'center', padding: '11px', borderRadius: '10px', backgroundColor: '#8C4F16', color: '#ffffff', textDecoration: 'none', fontWeight: 600 }}>Get Started</a>
+                <Link to="/customer" style={{ textAlign: 'center', padding: '10px', borderRadius: '10px', border: '1px solid #D8C3B5', textDecoration: 'none', color: '#211A16', fontWeight: 600 }}>Sign In</Link>
+                <Link to="/customer" style={{ textAlign: 'center', padding: '11px', borderRadius: '10px', backgroundColor: '#8C4F16', color: '#ffffff', textDecoration: 'none', fontWeight: 600 }}>Get Started</Link>
               </div>
             </motion.div>
           )}
@@ -221,8 +282,8 @@ const LandingPage = () => {
             </motion.p>
 
             <motion.div variants={fadeInUp} style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', justifyContent: 'center' }}>
-              <motion.a 
-                href="/register?role=buyer" 
+              <MotionLink 
+                to="/customer/products" 
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 style={{
@@ -236,10 +297,10 @@ const LandingPage = () => {
                   boxShadow: '0 8px 20px rgba(140, 79, 22, 0.3)'
                 }}
               >
-                Procure Equipment (Gym / Club) →
-              </motion.a>
-              <motion.a 
-                href="/register?role=supplier" 
+                Explore Marketplace →
+              </MotionLink>
+              <MotionLink 
+                to="/supplier" 
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 style={{
@@ -254,12 +315,12 @@ const LandingPage = () => {
                   boxShadow: '0 2px 6px rgba(83, 68, 57, 0.05)'
                 }}
               >
-                List Fleet / Inventory (Manufacturer)
-              </motion.a>
+                Become a Supplier
+              </MotionLink>
             </motion.div>
 
             <motion.p variants={fadeInUp} style={{ marginTop: '16px', fontSize: '13px', color: '#857468' }}>
-              Already registered? <a href="/login" style={{ color: '#8C4F16', fontWeight: 600, textDecoration: 'underline' }}>Sign In here</a>.
+              Already registered? <Link to="/customer" style={{ color: '#8C4F16', fontWeight: 600, textDecoration: 'underline' }}>Sign In here</Link>.
             </motion.p>
           </motion.div>
         </section>
@@ -286,6 +347,139 @@ const LandingPage = () => {
                 <motion.div key={i} variants={scaleIn}>
                   <p style={{ fontSize: '36px', fontWeight: 800, color: '#8C4F16', marginBottom: '4px' }}>{stat.val}</p>
                   <p style={{ fontSize: '14px', fontWeight: 600, color: '#534439' }}>{stat.label}</p>
+                </motion.div>
+              ))}
+            </motion.div>
+          </div>
+        </section>
+
+        {/* 4B. MARKETPLACE CATEGORIES */}
+        <section id="categories" style={{ padding: '88px 0', backgroundColor: '#FFF8F5' }}>
+          <div className="container">
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={fadeInUp}
+              style={{ textAlign: 'center', maxWidth: '640px', margin: '0 auto 48px' }}
+            >
+              <h2 style={{ fontSize: '34px', fontWeight: 800, color: '#211A16' }}>Marketplace Categories</h2>
+              <p style={{ marginTop: '12px', fontSize: '16px', color: '#534439' }}>
+                Every category of commercial fitness equipment, sourced from verified manufacturers.
+              </p>
+            </motion.div>
+
+            <motion.div
+              variants={staggerContainer}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: '-50px' }}
+              style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '20px' }}
+            >
+              {marketplaceCategories.map((cat) => (
+                <motion.div key={cat.name} variants={fadeInUp}>
+                  <Link
+                    to={`/customer/products?category=${encodeURIComponent(cat.name)}`}
+                    style={{ textDecoration: 'none', display: 'block' }}
+                  >
+                    <motion.div
+                      whileHover={{ y: -6, borderColor: '#8C4F16', transition: { duration: 0.2 } }}
+                      style={{
+                        backgroundColor: '#ffffff',
+                        border: '1px solid #D8C3B5',
+                        borderRadius: '20px',
+                        padding: '28px 24px',
+                        height: '100%',
+                        boxSizing: 'border-box',
+                      }}
+                    >
+                      <div style={{ fontSize: '28px', marginBottom: '14px' }}>{cat.icon}</div>
+                      <h3 style={{ fontSize: '16px', fontWeight: 700, color: '#211A16', marginBottom: '6px' }}>
+                        {cat.name}
+                      </h3>
+                      <p style={{ fontSize: '13px', color: '#534439', lineHeight: 1.5 }}>{cat.desc}</p>
+                    </motion.div>
+                  </Link>
+                </motion.div>
+              ))}
+            </motion.div>
+          </div>
+        </section>
+
+        {/* 4C. FEATURED PRODUCTS */}
+        <section id="featured-products" style={{ padding: '88px 0', backgroundColor: '#ffffff', borderTop: '1px solid #D8C3B5', borderBottom: '1px solid #D8C3B5' }}>
+          <div className="container">
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={fadeInUp}
+              style={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                justifyContent: 'space-between',
+                alignItems: 'flex-end',
+                gap: '16px',
+                marginBottom: '48px',
+              }}
+            >
+              <div>
+                <h2 style={{ fontSize: '34px', fontWeight: 800, color: '#211A16', marginBottom: '8px' }}>Featured Products</h2>
+                <p style={{ fontSize: '16px', color: '#534439' }}>Popular commercial equipment currently trending with gym buyers.</p>
+              </div>
+              <Link
+                to="/customer/products"
+                style={{ fontSize: '14px', fontWeight: 700, color: '#8C4F16', textDecoration: 'none', whiteSpace: 'nowrap' }}
+              >
+                View All Products →
+              </Link>
+            </motion.div>
+
+            <motion.div
+              variants={staggerContainer}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: '-50px' }}
+              style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '24px' }}
+            >
+              {featuredProducts.map((product) => (
+                <motion.div
+                  key={product.id}
+                  variants={fadeInUp}
+                  whileHover={{ y: -6, transition: { duration: 0.2 } }}
+                  style={{
+                    backgroundColor: '#FFF8F5',
+                    border: '1px solid #D8C3B5',
+                    borderRadius: '20px',
+                    overflow: 'hidden',
+                  }}
+                >
+                  <Link to={`/customer/product/${product.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                    <div style={{ width: '100%', height: '170px', overflow: 'hidden' }}>
+                      <motion.img
+                        src={product.image}
+                        alt={product.name}
+                        whileHover={{ scale: 1.08 }}
+                        transition={{ duration: 0.3 }}
+                        style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                      />
+                    </div>
+                    <div style={{ padding: '18px' }}>
+                      <span style={{ fontSize: '11px', fontWeight: 700, color: '#00687A', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                        {product.category}
+                      </span>
+                      <h3 style={{ fontSize: '15px', fontWeight: 700, color: '#211A16', margin: '6px 0 4px', lineHeight: 1.3 }}>
+                        {product.name}
+                      </h3>
+                      <p style={{ fontSize: '12px', color: '#857468', marginBottom: '10px' }}>by {product.supplier}</p>
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                        <span style={{ fontSize: '17px', fontWeight: 800, color: '#8C4F16' }}>
+                          ₹{product.price.toLocaleString('en-IN')}
+                        </span>
+                        <span style={{ fontSize: '12px', fontWeight: 600, color: '#79573D' }}>★ {product.rating}</span>
+                      </div>
+                    </div>
+                  </Link>
                 </motion.div>
               ))}
             </motion.div>
@@ -468,14 +662,14 @@ const LandingPage = () => {
                   </li>
                 </ul>
 
-                <motion.a 
-                  href="/register?role=buyer" 
+                <MotionLink 
+                  to="/customer" 
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   style={{ display: 'inline-block', backgroundColor: '#8C4F16', color: '#ffffff', padding: '14px 28px', borderRadius: '12px', textDecoration: 'none', fontWeight: 600, fontSize: '15px' }}
                 >
                   Create Buyer Account →
-                </motion.a>
+                </MotionLink>
               </motion.div>
 
               {/* For Manufacturers */}
@@ -504,14 +698,14 @@ const LandingPage = () => {
                   </li>
                 </ul>
 
-                <motion.a 
-                  href="/register?role=supplier" 
+                <MotionLink 
+                  to="/supplier" 
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   style={{ display: 'inline-block', backgroundColor: '#ffffff', border: '1px solid #D8C3B5', color: '#211A16', padding: '14px 28px', borderRadius: '12px', textDecoration: 'none', fontWeight: 600, fontSize: '15px' }}
                 >
                   Register Manufacturer →
-                </motion.a>
+                </MotionLink>
               </motion.div>
             </motion.div>
           </div>
@@ -575,22 +769,22 @@ const LandingPage = () => {
               Join hundreds of fitness clubs scaling their floor plans and cutting procurement costs on GymHub.
             </p>
             <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' }}>
-              <motion.a 
-                href="/register?role=buyer" 
+              <MotionLink 
+                to="/customer" 
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 style={{ padding: '16px 36px', borderRadius: '14px', backgroundColor: '#8C4F16', color: '#ffffff', fontSize: '16px', fontWeight: 700, textDecoration: 'none', boxShadow: '0 8px 24px rgba(140, 79, 22, 0.3)' }}
               >
                 Join as Gym Buyer →
-              </motion.a>
-              <motion.a 
-                href="/register?role=supplier" 
+              </MotionLink>
+              <MotionLink 
+                to="/supplier" 
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 style={{ padding: '16px 36px', borderRadius: '14px', backgroundColor: '#ffffff', color: '#211A16', border: '1px solid #D8C3B5', fontSize: '16px', fontWeight: 700, textDecoration: 'none' }}
               >
                 Join as Manufacturer →
-              </motion.a>
+              </MotionLink>
             </div>
           </motion.div>
         </section>
@@ -603,7 +797,7 @@ const LandingPage = () => {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '48px', marginBottom: '48px' }}>
             
             <div className="footer-brand" style={{ gridColumn: 'span 2' }}>
-              <a href="/" style={{ display: 'inline-block', marginBottom: '16px' }}>
+              <Link to="/" style={{ display: 'inline-block', marginBottom: '16px' }}>
                 <img 
                   src={logo} 
                   alt="GymHub B2B Logo" 
@@ -614,7 +808,7 @@ const LandingPage = () => {
                     filter: 'drop-shadow(0 2px 8px rgba(255,255,255,0.1))'
                   }} 
                 />
-              </a>
+              </Link>
               <p style={{ fontSize: '14px', color: '#EDE0D9', maxWidth: '380px', lineHeight: 1.6 }}>
                 The premier B2B marketplace for commercial fitness equipment procurement, factory wholesale pricing, and milestone-backed escrow safety.
               </p>
@@ -623,9 +817,9 @@ const LandingPage = () => {
             <div>
               <h4 style={{ fontSize: '16px', fontWeight: 700, marginBottom: '16px' }}>Platform</h4>
               <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '14px', color: '#EDE0D9' }}>
-                <li><a href="/register?role=buyer" style={{ textDecoration: 'none', color: 'inherit' }}>For Gym Operators</a></li>
-                <li><a href="/register?role=supplier" style={{ textDecoration: 'none', color: 'inherit' }}>For Manufacturers</a></li>
-                <li><a href="#about" style={{ textDecoration: 'none', color: 'inherit' }}>Procurement Terms</a></li>
+                <li><Link to="/customer/products" style={{ textDecoration: 'none', color: 'inherit' }}>Marketplace</Link></li>
+                <li><Link to="/customer" style={{ textDecoration: 'none', color: 'inherit' }}>For Gym Operators</Link></li>
+                <li><Link to="/supplier" style={{ textDecoration: 'none', color: 'inherit' }}>For Manufacturers</Link></li>
                 <li><a href="#how-it-works" style={{ textDecoration: 'none', color: 'inherit' }}>Escrow Architecture</a></li>
               </ul>
             </div>

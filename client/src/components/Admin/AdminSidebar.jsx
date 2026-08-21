@@ -1,18 +1,30 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import {
+  LayoutDashboard,
+  Users,
+  Factory,
+  ShieldCheck,
+  Package,
+  Tags,
+  ShoppingCart,
+  Bell,
+  Settings as SettingsIcon,
+  LogOut,
+} from 'lucide-react';
 
 const AdminSidebar = ({ isOpen, toggleSidebar }) => {
   const menuItems = [
-    { label: 'Dashboard', path: '/admin', icon: '📊' },
-    { label: 'Users', path: '/admin/users', icon: '👥' },
-    { label: 'Suppliers', path: '/admin/suppliers', icon: '🏭' },
-    { label: 'Verification', path: '/admin/verification', icon: '🛡️' },
-    { label: 'Products', path: '/admin/products', icon: '📦' },
-    { label: 'Categories', path: '/admin/categories', icon: '📑' },
-    { label: 'Orders', path: '/admin/orders', icon: '🛒' },
-    { label: 'Notifications', path: '/admin/notifications', icon: '🔔' },
-    { label: 'Settings', path: '/admin/settings', icon: '⚙️' }
+    { label: 'Dashboard', path: '/admin', icon: LayoutDashboard },
+    { label: 'Users', path: '/admin/users', icon: Users },
+    { label: 'Suppliers', path: '/admin/suppliers', icon: Factory },
+    { label: 'Verification', path: '/admin/verification', icon: ShieldCheck },
+    { label: 'Products', path: '/admin/products', icon: Package },
+    { label: 'Categories', path: '/admin/categories', icon: Tags },
+    { label: 'Orders', path: '/admin/orders', icon: ShoppingCart },
+    { label: 'Notifications', path: '/admin/notifications', icon: Bell },
+    { label: 'Settings', path: '/admin/settings', icon: SettingsIcon },
   ];
 
   return (
@@ -114,7 +126,7 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
                       transition: 'background-color 0.2s ease, color 0.2s ease'
                     }}
                   >
-                    <span style={{ fontSize: '16px' }}>{item.icon}</span>
+                    <item.icon size={17} strokeWidth={2} />
                     <span>{item.label}</span>
                   </motion.div>
                 )}
@@ -144,7 +156,7 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
               textAlign: 'left'
             }}
           >
-            <span>🚪</span>
+            <LogOut size={17} strokeWidth={2} />
             <span>Logout</span>
           </motion.button>
         </div>

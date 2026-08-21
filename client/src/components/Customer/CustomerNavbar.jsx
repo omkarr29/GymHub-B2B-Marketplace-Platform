@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useCart } from '../../context/CartContext.jsx';
 
 /**
  * CustomerNavbar Component
@@ -7,17 +8,16 @@ import { Link, useNavigate } from 'react-router-dom';
  *
  * Props:
  * - onToggleSidebar (function): Toggles mobile sidebar drawer.
- * - cartCount (number): Number of active items in the cart (default 3).
  * - unreadNotificationsCount (number): Number of unread alerts (default 2).
  */
 const CustomerNavbar = ({
   onToggleSidebar = () => {},
-  cartCount = 3,
   unreadNotificationsCount = 2,
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const navigate = useNavigate();
+  const { itemCount: cartCount } = useCart();
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
@@ -331,25 +331,25 @@ const CustomerNavbar = ({
                 </Link>
 
                 <Link
-                  to="/customer/ai-assistant"
+                  to="/customer/notifications"
                   onClick={() => setShowProfileMenu(false)}
                   style={{
                     display: 'block',
                     padding: '9px 14px',
                     fontSize: '12px',
-                    color: '#00687a',
+                    color: '#211a16',
                     textDecoration: 'none',
                     borderBottom: '1px solid #f9ebe4',
                   }}
                 >
-                  AI Equipment Advisor
+                  Notifications
                 </Link>
 
                 <button
                   type="button"
                   onClick={() => {
                     setShowProfileMenu(false);
-                    window.location.href = '/login';
+                    window.location.href = '/';
                   }}
                   style={{
                     width: '100%',

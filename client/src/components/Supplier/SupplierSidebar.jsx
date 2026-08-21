@@ -1,363 +1,245 @@
-import React, { useState } from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import React from 'react';
+import { NavLink } from 'react-router-dom';
+import {
+  LayoutDashboard,
+  Package,
+  PlusCircle,
+  Boxes,
+  ShoppingCart,
+  Users,
+  MessageSquare,
+  Bell,
+  Building2,
+  LogOut,
+  X,
+} from 'lucide-react';
 
-const SupplierSidebar = ({ isOpen, toggleSidebar }) => {
-  const location = useLocation();
-  const [openSubMenus, setOpenSubMenus] = useState({
-    products: true,
-    orders: true
-  });
+/**
+ * SupplierSidebar Component
+ * Fixed left navigation for the Supplier Module, mirroring the
+ * structure and styling of CustomerSidebar.jsx for consistency.
+ *
+ * Props:
+ * - isOpen (boolean): Controls visibility on mobile screens.
+ * - onClose (function): Callback to dismiss the sidebar on mobile.
+ */
+const SupplierSidebar = ({ isOpen = false, onClose = () => {} }) => {
+  const navItems = [
+    { label: 'Dashboard', path: '/supplier', end: true, icon: LayoutDashboard },
+    { label: 'Products', path: '/supplier/products', icon: Package },
+    { label: 'Add Product', path: '/supplier/products/add', icon: PlusCircle },
+    { label: 'Inventory', path: '/supplier/inventory', icon: Boxes },
+    { label: 'Orders', path: '/supplier/orders', icon: ShoppingCart },
+    { label: 'Buyers', path: '/supplier/buyers', icon: Users },
+    { label: 'Messages', path: '/supplier/messages', icon: MessageSquare },
+    { label: 'Notifications', path: '/supplier/notifications', icon: Bell },
+    { label: 'Business Profile', path: '/supplier/profile', icon: Building2 },
+  ];
 
-  const toggleSubMenu = (menuKey) => {
-    setOpenSubMenus((prev) => ({
-      ...prev,
-      [menuKey]: !prev[menuKey]
-    }));
+  const handleLogout = () => {
+    window.location.href = '/';
   };
-
-  const navItemClass = (isActive) => ({
-    display: 'flex',
-    alignItems: 'center',
-    gap: '12px',
-    padding: '9px 14px',
-    borderRadius: '6px',
-    textDecoration: 'none',
-    fontSize: '13px',
-    fontWeight: isActive ? '600' : '400',
-    color: isActive ? '#ffffff' : '#534439',
-    backgroundColor: isActive ? '#8c4f16' : 'transparent',
-    transition: 'background-color 0.2s ease, color 0.2s ease'
-  });
-
-  const subNavItemClass = (isActive) => ({
-    display: 'flex',
-    alignItems: 'center',
-    gap: '8px',
-    padding: '7px 12px 7px 32px',
-    borderRadius: '6px',
-    textDecoration: 'none',
-    fontSize: '12px',
-    fontWeight: isActive ? '600' : '400',
-    color: isActive ? '#8c4f16' : '#534439',
-    backgroundColor: isActive ? '#fff1e9' : 'transparent',
-    transition: 'background-color 0.2s ease, color 0.2s ease'
-  });
 
   return (
     <>
       {/* Mobile Backdrop */}
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={toggleSidebar}
-            style={{
-              position: 'fixed',
-              inset: 0,
-              backgroundColor: 'rgba(33, 26, 22, 0.4)',
-              zIndex: 40
-            }}
-          />
-        )}
-      </AnimatePresence>
+      {isOpen && (
+        <div
+          onClick={onClose}
+          style={{
+            position: 'fixed',
+            inset: 0,
+            backgroundColor: 'rgba(33, 26, 22, 0.5)',
+            zIndex: 40,
+            display: typeof window !== 'undefined' && window.innerWidth >= 1024 ? 'none' : 'block',
+          }}
+        />
+      )}
 
       {/* Sidebar Container */}
       <aside
         style={{
-          width: '260px',
-          minWidth: '260px',
-          height: '100vh',
-          backgroundColor: '#fff8f5',
-          borderRight: '1px solid #d8c3b5',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'space-between',
-          padding: '20px 14px',
-          position: 'sticky',
+          position: 'fixed',
           top: 0,
+          bottom: 0,
           left: 0,
           zIndex: 50,
+          width: '260px',
+          display: 'flex',
+          flexDirection: 'column',
+          backgroundColor: '#fff1e9',
+          borderRight: '1px solid #d8c3b5',
+          transform: isOpen || (typeof window !== 'undefined' && window.innerWidth >= 1024) ? 'translateX(0)' : 'translateX(-100%)',
+          transition: 'transform 0.3s ease-in-out',
           boxSizing: 'border-box',
-          overflowY: 'auto'
         }}
       >
-        <div>
-          {/* Brand Logo & Portal Tag */}
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '12px',
-              paddingBottom: '20px',
-              borderBottom: '1px solid #ede0d9',
-              marginBottom: '16px'
-            }}
-          >
-            <motion.div
-              whileHover={{ rotate: 5, scale: 1.05 }}
+        {/* Brand Header */}
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            height: '64px',
+            padding: '0 20px',
+            borderBottom: '1px solid #ede0d9',
+            boxSizing: 'border-box',
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <div
               style={{
                 width: '36px',
                 height: '36px',
-                backgroundColor: '#8c4f16',
+                minWidth: '36px',
+                minHeight: '36px',
                 borderRadius: '8px',
+                backgroundColor: '#00687a',
+                color: '#ffffff',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                color: '#ffffff',
                 fontWeight: '700',
-                fontSize: '18px'
+                fontSize: '18px',
               }}
             >
               G
-            </motion.div>
+            </div>
             <div>
-              <h2 style={{ margin: 0, fontSize: '18px', fontWeight: '700', color: '#211a16' }}>
-                GymHub
-              </h2>
+              <span style={{ fontSize: '18px', fontWeight: '700', color: '#8c4f16' }}>
+                Gym<span style={{ color: '#00687a' }}>Hub</span>
+              </span>
               <span
                 style={{
-                  fontSize: '11px',
-                  color: '#00687a',
+                  display: 'block',
+                  fontSize: '10px',
                   fontWeight: '600',
-                  letterSpacing: '0.5px'
+                  color: '#00687a',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.05em',
                 }}
               >
-                SUPPLIER PORTAL
+                Supplier Portal
               </span>
             </div>
           </div>
 
-          {/* Navigation Menu */}
-          <nav style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-            {/* Dashboard */}
-            <NavLink
-              to="/supplier"
-              end
-              onClick={() => isOpen && toggleSidebar && toggleSidebar()}
-              style={({ isActive }) => navItemClass(isActive)}
-            >
-              <span style={{ fontSize: '16px' }}>📊</span>
-              <span>Dashboard</span>
-            </NavLink>
-
-            {/* Marketplace / Products Submenu */}
-            <div style={{ marginTop: '4px' }}>
-              <button
-                onClick={() => toggleSubMenu('products')}
-                style={{
-                  width: '100%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  padding: '9px 14px',
-                  borderRadius: '6px',
-                  border: 'none',
-                  backgroundColor: 'transparent',
-                  color: '#534439',
-                  fontSize: '13px',
-                  fontWeight: '500',
-                  cursor: 'pointer',
-                  textAlign: 'left'
-                }}
-              >
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                  <span style={{ fontSize: '16px' }}>📦</span>
-                  <span>Products</span>
-                </div>
-                <span style={{ fontSize: '10px', color: '#857468' }}>
-                  {openSubMenus.products ? '▲' : '▼'}
-                </span>
-              </button>
-
-              {openSubMenus.products && (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '2px', marginTop: '2px' }}>
-                  <NavLink
-                    to="/supplier/products"
-                    end
-                    onClick={() => isOpen && toggleSidebar && toggleSidebar()}
-                    style={({ isActive }) => subNavItemClass(isActive)}
-                  >
-                    <span>•</span>
-                    <span>My Products</span>
-                  </NavLink>
-                  <NavLink
-                    to="/supplier/products/add"
-                    onClick={() => isOpen && toggleSidebar && toggleSidebar()}
-                    style={({ isActive }) => subNavItemClass(isActive)}
-                  >
-                    <span>•</span>
-                    <span>Add Product</span>
-                  </NavLink>
-                </div>
-              )}
-            </div>
-
-            {/* Inventory */}
-            <NavLink
-              to="/supplier/inventory"
-              onClick={() => isOpen && toggleSidebar && toggleSidebar()}
-              style={({ isActive }) => navItemClass(isActive)}
-            >
-              <span style={{ fontSize: '16px' }}>📋</span>
-              <span>Inventory</span>
-            </NavLink>
-
-            {/* Orders Submenu */}
-            <div style={{ marginTop: '4px' }}>
-              <button
-                onClick={() => toggleSubMenu('orders')}
-                style={{
-                  width: '100%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  padding: '9px 14px',
-                  borderRadius: '6px',
-                  border: 'none',
-                  backgroundColor: 'transparent',
-                  color: '#534439',
-                  fontSize: '13px',
-                  fontWeight: '500',
-                  cursor: 'pointer',
-                  textAlign: 'left'
-                }}
-              >
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                  <span style={{ fontSize: '16px' }}>🛒</span>
-                  <span>Orders</span>
-                </div>
-                <span style={{ fontSize: '10px', color: '#857468' }}>
-                  {openSubMenus.orders ? '▲' : '▼'}
-                </span>
-              </button>
-
-              {openSubMenus.orders && (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '2px', marginTop: '2px' }}>
-                  <NavLink
-                    to="/supplier/orders"
-                    end
-                    onClick={() => isOpen && toggleSidebar && toggleSidebar()}
-                    style={({ isActive }) => subNavItemClass(isActive)}
-                  >
-                    <span>•</span>
-                    <span>All Orders</span>
-                  </NavLink>
-                  <NavLink
-                    to="/supplier/orders?status=Pending"
-                    onClick={() => isOpen && toggleSidebar && toggleSidebar()}
-                    style={() => subNavItemClass(location.search === '?status=Pending')}
-                  >
-                    <span>•</span>
-                    <span>Pending Orders</span>
-                  </NavLink>
-                  <NavLink
-                    to="/supplier/orders?status=Processing"
-                    onClick={() => isOpen && toggleSidebar && toggleSidebar()}
-                    style={() => subNavItemClass(location.search === '?status=Processing')}
-                  >
-                    <span>•</span>
-                    <span>Processing</span>
-                  </NavLink>
-                  <NavLink
-                    to="/supplier/orders?status=Shipped"
-                    onClick={() => isOpen && toggleSidebar && toggleSidebar()}
-                    style={() => subNavItemClass(location.search === '?status=Shipped')}
-                  >
-                    <span>•</span>
-                    <span>Shipped</span>
-                  </NavLink>
-                  <NavLink
-                    to="/supplier/orders?status=Delivered"
-                    onClick={() => isOpen && toggleSidebar && toggleSidebar()}
-                    style={() => subNavItemClass(location.search === '?status=Delivered')}
-                  >
-                    <span>•</span>
-                    <span>Delivered</span>
-                  </NavLink>
-                </div>
-              )}
-            </div>
-
-            {/* Buyers */}
-            <NavLink
-              to="/supplier/buyers"
-              onClick={() => isOpen && toggleSidebar && toggleSidebar()}
-              style={({ isActive }) => navItemClass(isActive)}
-            >
-              <span style={{ fontSize: '16px' }}>🏢</span>
-              <span>Buyers</span>
-            </NavLink>
-
-            {/* Messages */}
-            <NavLink
-              to="/supplier/messages"
-              onClick={() => isOpen && toggleSidebar && toggleSidebar()}
-              style={({ isActive }) => navItemClass(isActive)}
-            >
-              <span style={{ fontSize: '16px' }}>💬</span>
-              <span>Messages</span>
-            </NavLink>
-
-            {/* Notifications */}
-            <NavLink
-              to="/supplier/notifications"
-              onClick={() => isOpen && toggleSidebar && toggleSidebar()}
-              style={({ isActive }) => navItemClass(isActive)}
-            >
-              <span style={{ fontSize: '16px' }}>🔔</span>
-              <span>Notifications</span>
-            </NavLink>
-
-            {/* Business Profile */}
-            <NavLink
-              to="/supplier/profile"
-              onClick={() => isOpen && toggleSidebar && toggleSidebar()}
-              style={({ isActive }) => navItemClass(isActive)}
-            >
-              <span style={{ fontSize: '16px' }}>🛡️</span>
-              <span>Business Profile</span>
-            </NavLink>
-
-            {/* Settings */}
-            <NavLink
-              to="/supplier/settings"
-              onClick={() => isOpen && toggleSidebar && toggleSidebar()}
-              style={({ isActive }) => navItemClass(isActive)}
-            >
-              <span style={{ fontSize: '16px' }}>⚙️</span>
-              <span>Settings</span>
-            </NavLink>
-          </nav>
-        </div>
-
-        {/* Footer / Logout */}
-        <div style={{ borderTop: '1px solid #ede0d9', paddingTop: '14px', marginTop: '16px' }}>
-          <motion.button
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            onClick={() => alert('Supplier logged out successfully.')}
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Close Sidebar"
             style={{
-              width: '100%',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '12px',
-              padding: '9px 14px',
-              borderRadius: '6px',
+              background: 'none',
               border: 'none',
-              backgroundColor: '#fff1e9',
-              color: '#ba1a1a',
-              fontWeight: '600',
-              fontSize: '13px',
               cursor: 'pointer',
-              textAlign: 'left'
+              padding: '4px',
+              color: '#534439',
+              display: typeof window !== 'undefined' && window.innerWidth >= 1024 ? 'none' : 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
             }}
           >
-            <span>🚪</span>
-            <span>Logout</span>
-          </motion.button>
+            <X size={22} strokeWidth={2} />
+          </button>
+        </div>
+
+        {/* Navigation Menu */}
+        <nav
+          style={{
+            flex: 1,
+            padding: '20px 14px',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '6px',
+            overflowY: 'auto',
+          }}
+        >
+          {navItems.map((item) => (
+            <NavLink
+              key={item.path}
+              to={item.path}
+              end={item.end}
+              onClick={onClose}
+              style={({ isActive }) => ({
+                display: 'flex',
+                alignItems: 'center',
+                gap: '12px',
+                padding: '10px 14px',
+                borderRadius: '8px',
+                fontSize: '14px',
+                fontWeight: isActive ? '600' : '500',
+                textDecoration: 'none',
+                backgroundColor: isActive ? '#00687a' : 'transparent',
+                color: isActive ? '#ffffff' : '#534439',
+                transition: 'background-color 0.2s ease, color 0.2s ease',
+              })}
+            >
+              <item.icon size={18} strokeWidth={2} />
+              <span>{item.label}</span>
+            </NavLink>
+          ))}
+        </nav>
+
+        {/* Bottom User Info & Logout */}
+        <div style={{ padding: '16px', borderTop: '1px solid #ede0d9', boxSizing: 'border-box' }}>
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              padding: '10px 12px',
+              borderRadius: '8px',
+              backgroundColor: '#ede0d9',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', overflow: 'hidden' }}>
+              <div
+                style={{
+                  width: '32px',
+                  height: '32px',
+                  minWidth: '32px',
+                  minHeight: '32px',
+                  borderRadius: '50%',
+                  backgroundColor: '#57b3ca',
+                  color: '#ffffff',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '12px',
+                  fontWeight: '700',
+                }}
+              >
+                FP
+              </div>
+              <div style={{ overflow: 'hidden', whiteSpace: 'nowrap' }}>
+                <p style={{ margin: 0, fontSize: '12px', fontWeight: '600', color: '#211a16', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                  FitPro Industrial Ltd
+                </p>
+                <p style={{ margin: 0, fontSize: '11px', color: '#79573d', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                  Manufacturer
+                </p>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              onClick={handleLogout}
+              title="Logout"
+              style={{
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
+                padding: '6px',
+                borderRadius: '6px',
+                color: '#ba1a1a',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <LogOut size={18} strokeWidth={2} />
+            </button>
+          </div>
         </div>
       </aside>
     </>

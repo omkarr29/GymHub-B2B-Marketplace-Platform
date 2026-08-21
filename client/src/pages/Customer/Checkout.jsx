@@ -1,49 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-// Reusable Form Input Sub-component
-const FormInput = ({ label, name, type = 'text', required, value, onChange, style, ...props }) => (
-  <div style={style}>
-    <label style={styles.inputLabel}>{label}</label>
-    <input
-      type={type}
-      name={name}
-      required={required}
-      value={value}
-      onChange={onChange}
-      style={styles.textInput}
-      {...props}
-    />
-  </div>
-);
-
-// Reusable Payment Method Radio Sub-component
-const PaymentOption = ({ id, value, title, description, badge, checked, onChange }) => (
-  <label
-    style={{
-      ...styles.paymentOptionLabel,
-      borderColor: checked ? '#8c4f16' : '#ede0d9',
-      backgroundColor: checked ? '#fff1e9' : '#ffffff',
-    }}
-  >
-    <input
-      type="radio"
-      name="paymentMethod"
-      value={id}
-      checked={checked}
-      onChange={onChange}
-      style={styles.radioInput}
-    />
-    <div style={styles.paymentContent}>
-      <div style={styles.paymentHeaderRow}>
-        <span style={styles.paymentTitle}>{title}</span>
-        {badge && <span style={styles.paymentBadge}>{badge}</span>}
-      </div>
-      <p style={styles.paymentDesc}>{description}</p>
-    </div>
-  </label>
-);
-
 const Checkout = () => {
   const navigate = useNavigate();
 
@@ -109,188 +66,543 @@ const Checkout = () => {
   };
 
   return (
-    <div style={styles.pageContainer}>
+    <div style={{ padding: '24px', backgroundColor: '#fff8f5', minHeight: '100%', boxSizing: 'border-box' }}>
       {/* Header */}
-      <div style={styles.headerContainer}>
-        <div style={styles.breadcrumb}>
-          <Link to="/customer/cart" style={styles.breadcrumbLink}>
+      <div style={{ marginBottom: '24px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', color: '#79573d', marginBottom: '4px' }}>
+          <Link to="/customer/cart" style={{ color: '#8c4f16', textDecoration: 'none', fontWeight: '600' }}>
             &larr; Back to Cart
           </Link>
           <span>/</span>
-          <span style={styles.breadcrumbCurrent}>B2B Checkout & Purchase Order</span>
+          <span style={{ fontWeight: '600', color: '#211a16' }}>B2B Checkout & Purchase Order</span>
         </div>
-        <h1 style={styles.mainTitle}>Finalize Procurement Order</h1>
-        <p style={styles.subtitle}>
+        <h1 style={{ margin: 0, fontSize: '24px', fontWeight: '700', color: '#211a16' }}>
+          Finalize Procurement Order
+        </h1>
+        <p style={{ margin: '4px 0 0 0', fontSize: '13px', color: '#79573d' }}>
           Provide delivery logistics and billing details for commercial tax invoicing.
         </p>
       </div>
 
       <form onSubmit={handlePlaceOrder}>
-        <div style={styles.gridContainer}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '24px', alignItems: 'start' }}>
           {/* Left Column: Form Sections */}
-          <div style={styles.leftColumn}>
-            
+          <div style={{ gridColumn: 'span 2', display: 'flex', flexDirection: 'column', gap: '20px' }}>
             {/* Section 1: Business & GST Information */}
-            <div style={styles.card}>
-              <div style={styles.sectionHeader}>
-                <h2 style={styles.sectionTitle}>
-                  <span style={styles.stepBadge}>1</span>
+            <div
+              style={{
+                backgroundColor: '#ffffff',
+                border: '1px solid #ede0d9',
+                borderRadius: '16px',
+                padding: '24px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '16px',
+              }}
+            >
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  borderBottom: '1px solid #ede0d9',
+                  paddingBottom: '12px',
+                }}
+              >
+                <h2 style={{ margin: 0, fontSize: '16px', fontWeight: '700', color: '#211a16', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <span
+                    style={{
+                      width: '24px',
+                      height: '24px',
+                      borderRadius: '50%',
+                      backgroundColor: '#8c4f16',
+                      color: '#ffffff',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: '12px',
+                      fontWeight: '700',
+                    }}
+                  >
+                    1
+                  </span>
                   <span>Business & GST Identification</span>
                 </h2>
-                <span style={styles.verifiedBadge}>✓ Verified GST Profile</span>
+                <span
+                  style={{
+                    fontSize: '11px',
+                    fontWeight: '600',
+                    color: '#15803d',
+                    backgroundColor: '#dcfce7',
+                    padding: '2px 8px',
+                    borderRadius: '4px',
+                  }}
+                >
+                  ✓ Verified GST Profile
+                </span>
               </div>
 
-              <div style={styles.formGridTwoCols}>
-                <FormInput
-                  label="Registered Business / Gym Name *"
-                  name="businessName"
-                  required
-                  value={formData.businessName}
-                  onChange={handleInputChange}
-                />
-                <FormInput
-                  label="GST Identification Number (GSTIN) *"
-                  name="gstin"
-                  required
-                  value={formData.gstin}
-                  onChange={handleInputChange}
-                  style={{ textTransform: 'uppercase', fontFamily: 'monospace' }}
-                />
-                <FormInput
-                  label="Contact Person / Procurement Manager *"
-                  name="contactPerson"
-                  required
-                  value={formData.contactPerson}
-                  onChange={handleInputChange}
-                />
-                <FormInput
-                  label="Official Contact Phone *"
-                  name="phone"
-                  type="tel"
-                  required
-                  value={formData.phone}
-                  onChange={handleInputChange}
-                />
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px', fontSize: '12px' }}>
+                <div>
+                  <label style={{ display: 'block', fontWeight: '600', marginBottom: '6px', color: '#534439' }}>
+                    Registered Business / Gym Name *
+                  </label>
+                  <input
+                    type="text"
+                    name="businessName"
+                    required
+                    value={formData.businessName}
+                    onChange={handleInputChange}
+                    style={{
+                      width: '100%',
+                      padding: '10px 12px',
+                      borderRadius: '8px',
+                      border: '1px solid #d8c3b5',
+                      backgroundColor: '#fff1e9',
+                      color: '#211a16',
+                      outline: 'none',
+                      boxSizing: 'border-box',
+                    }}
+                  />
+                </div>
+
+                <div>
+                  <label style={{ display: 'block', fontWeight: '600', marginBottom: '6px', color: '#534439' }}>
+                    GST Identification Number (GSTIN) *
+                  </label>
+                  <input
+                    type="text"
+                    name="gstin"
+                    required
+                    value={formData.gstin}
+                    onChange={handleInputChange}
+                    style={{
+                      width: '100%',
+                      padding: '10px 12px',
+                      borderRadius: '8px',
+                      border: '1px solid #d8c3b5',
+                      backgroundColor: '#fff1e9',
+                      color: '#211a16',
+                      outline: 'none',
+                      textTransform: 'uppercase',
+                      fontFamily: 'monospace',
+                      boxSizing: 'border-box',
+                    }}
+                  />
+                </div>
+
+                <div>
+                  <label style={{ display: 'block', fontWeight: '600', marginBottom: '6px', color: '#534439' }}>
+                    Contact Person / Procurement Manager *
+                  </label>
+                  <input
+                    type="text"
+                    name="contactPerson"
+                    required
+                    value={formData.contactPerson}
+                    onChange={handleInputChange}
+                    style={{
+                      width: '100%',
+                      padding: '10px 12px',
+                      borderRadius: '8px',
+                      border: '1px solid #d8c3b5',
+                      backgroundColor: '#fff1e9',
+                      color: '#211a16',
+                      outline: 'none',
+                      boxSizing: 'border-box',
+                    }}
+                  />
+                </div>
+
+                <div>
+                  <label style={{ display: 'block', fontWeight: '600', marginBottom: '6px', color: '#534439' }}>
+                    Official Contact Phone *
+                  </label>
+                  <input
+                    type="tel"
+                    name="phone"
+                    required
+                    value={formData.phone}
+                    onChange={handleInputChange}
+                    style={{
+                      width: '100%',
+                      padding: '10px 12px',
+                      borderRadius: '8px',
+                      border: '1px solid #d8c3b5',
+                      backgroundColor: '#fff1e9',
+                      color: '#211a16',
+                      outline: 'none',
+                      boxSizing: 'border-box',
+                    }}
+                  />
+                </div>
+
                 <div style={{ gridColumn: 'span 2' }}>
-                  <FormInput
-                    label="Billing & Tax Invoice Email *"
-                    name="email"
+                  <label style={{ display: 'block', fontWeight: '600', marginBottom: '6px', color: '#534439' }}>
+                    Billing & Tax Invoice Email *
+                  </label>
+                  <input
                     type="email"
+                    name="email"
                     required
                     value={formData.email}
                     onChange={handleInputChange}
+                    style={{
+                      width: '100%',
+                      padding: '10px 12px',
+                      borderRadius: '8px',
+                      border: '1px solid #d8c3b5',
+                      backgroundColor: '#fff1e9',
+                      color: '#211a16',
+                      outline: 'none',
+                      boxSizing: 'border-box',
+                    }}
                   />
                 </div>
               </div>
             </div>
 
             {/* Section 2: Delivery & Logistics */}
-            <div style={styles.card}>
-              <h2 style={{ ...styles.sectionHeader, borderBottom: '1px solid #ede0d9', paddingBottom: '12px', margin: 0 }}>
-                <span style={styles.sectionTitle}>
-                  <span style={styles.stepBadge}>2</span>
-                  <span>Commercial Facility Delivery Address</span>
+            <div
+              style={{
+                backgroundColor: '#ffffff',
+                border: '1px solid #ede0d9',
+                borderRadius: '16px',
+                padding: '24px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '16px',
+              }}
+            >
+              <h2
+                style={{
+                  margin: 0,
+                  fontSize: '16px',
+                  fontWeight: '700',
+                  color: '#211a16',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  borderBottom: '1px solid #ede0d9',
+                  paddingBottom: '12px',
+                }}
+              >
+                <span
+                  style={{
+                    width: '24px',
+                    height: '24px',
+                    borderRadius: '50%',
+                    backgroundColor: '#8c4f16',
+                    color: '#ffffff',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '12px',
+                    fontWeight: '700',
+                  }}
+                >
+                  2
                 </span>
+                <span>Commercial Facility Delivery Address</span>
               </h2>
 
-              <div style={styles.formGridLogistics}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '16px', fontSize: '12px' }}>
                 <div style={{ gridColumn: '1 / -1' }}>
-                  <FormInput
-                    label="Gym Facility / Warehouse Address *"
+                  <label style={{ display: 'block', fontWeight: '600', marginBottom: '6px', color: '#534439' }}>
+                    Gym Facility / Warehouse Address *
+                  </label>
+                  <input
+                    type="text"
                     name="address"
                     required
                     value={formData.address}
                     onChange={handleInputChange}
+                    style={{
+                      width: '100%',
+                      padding: '10px 12px',
+                      borderRadius: '8px',
+                      border: '1px solid #d8c3b5',
+                      backgroundColor: '#fff1e9',
+                      color: '#211a16',
+                      outline: 'none',
+                      boxSizing: 'border-box',
+                    }}
                   />
                 </div>
-                <FormInput
-                  label="City *"
-                  name="city"
-                  required
-                  value={formData.city}
-                  onChange={handleInputChange}
-                />
-                <FormInput
-                  label="State *"
-                  name="state"
-                  required
-                  value={formData.state}
-                  onChange={handleInputChange}
-                />
-                <FormInput
-                  label="PIN Code *"
-                  name="pincode"
-                  required
-                  value={formData.pincode}
-                  onChange={handleInputChange}
-                />
+
+                <div>
+                  <label style={{ display: 'block', fontWeight: '600', marginBottom: '6px', color: '#534439' }}>
+                    City *
+                  </label>
+                  <input
+                    type="text"
+                    name="city"
+                    required
+                    value={formData.city}
+                    onChange={handleInputChange}
+                    style={{
+                      width: '100%',
+                      padding: '10px 12px',
+                      borderRadius: '8px',
+                      border: '1px solid #d8c3b5',
+                      backgroundColor: '#fff1e9',
+                      color: '#211a16',
+                      outline: 'none',
+                      boxSizing: 'border-box',
+                    }}
+                  />
+                </div>
+
+                <div>
+                  <label style={{ display: 'block', fontWeight: '600', marginBottom: '6px', color: '#534439' }}>
+                    State *
+                  </label>
+                  <input
+                    type="text"
+                    name="state"
+                    required
+                    value={formData.state}
+                    onChange={handleInputChange}
+                    style={{
+                      width: '100%',
+                      padding: '10px 12px',
+                      borderRadius: '8px',
+                      border: '1px solid #d8c3b5',
+                      backgroundColor: '#fff1e9',
+                      color: '#211a16',
+                      outline: 'none',
+                      boxSizing: 'border-box',
+                    }}
+                  />
+                </div>
+
+                <div>
+                  <label style={{ display: 'block', fontWeight: '600', marginBottom: '6px', color: '#534439' }}>
+                    PIN Code *
+                  </label>
+                  <input
+                    type="text"
+                    name="pincode"
+                    required
+                    value={formData.pincode}
+                    onChange={handleInputChange}
+                    style={{
+                      width: '100%',
+                      padding: '10px 12px',
+                      borderRadius: '8px',
+                      border: '1px solid #d8c3b5',
+                      backgroundColor: '#fff1e9',
+                      color: '#211a16',
+                      outline: 'none',
+                      boxSizing: 'border-box',
+                    }}
+                  />
+                </div>
 
                 <div style={{ gridColumn: '1 / -1' }}>
-                  <label style={styles.inputLabel}>Unloading & Freight Instructions (Optional)</label>
+                  <label style={{ display: 'block', fontWeight: '600', marginBottom: '6px', color: '#534439' }}>
+                    Unloading & Freight Instructions (Optional)
+                  </label>
                   <textarea
                     rows="2"
                     name="deliveryInstructions"
                     value={formData.deliveryInstructions}
                     onChange={handleInputChange}
-                    style={styles.textareaInput}
+                    style={{
+                      width: '100%',
+                      padding: '10px 12px',
+                      borderRadius: '8px',
+                      border: '1px solid #d8c3b5',
+                      backgroundColor: '#fff1e9',
+                      color: '#211a16',
+                      outline: 'none',
+                      boxSizing: 'border-box',
+                      fontFamily: 'inherit',
+                      resize: 'vertical',
+                    }}
                   />
                 </div>
               </div>
             </div>
 
             {/* Section 3: B2B Payment Options */}
-            <div style={styles.card}>
-              <h2 style={{ ...styles.sectionHeader, borderBottom: '1px solid #ede0d9', paddingBottom: '12px', margin: 0 }}>
-                <span style={styles.sectionTitle}>
-                  <span style={styles.stepBadge}>3</span>
-                  <span>Payment Settlement Mode</span>
+            <div
+              style={{
+                backgroundColor: '#ffffff',
+                border: '1px solid #ede0d9',
+                borderRadius: '16px',
+                padding: '24px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '16px',
+              }}
+            >
+              <h2
+                style={{
+                  margin: 0,
+                  fontSize: '16px',
+                  fontWeight: '700',
+                  color: '#211a16',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  borderBottom: '1px solid #ede0d9',
+                  paddingBottom: '12px',
+                }}
+              >
+                <span
+                  style={{
+                    width: '24px',
+                    height: '24px',
+                    borderRadius: '50%',
+                    backgroundColor: '#8c4f16',
+                    color: '#ffffff',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '12px',
+                    fontWeight: '700',
+                  }}
+                >
+                  3
                 </span>
+                <span>Payment Settlement Mode</span>
               </h2>
 
-              <div style={styles.paymentStack}>
-                <PaymentOption
-                  id="online"
-                  title="Online Payment (NetBanking / UPI / Corporate Cards)"
-                  description="Secure checkout gateway (Razorpay API integration ready)."
-                  badge="Fastest Dispatch"
-                  checked={formData.paymentMethod === 'online'}
-                  onChange={handleInputChange}
-                />
-                <PaymentOption
-                  id="bank_transfer"
-                  title="Direct Bank Transfer / RTGS / NEFT"
-                  description="Generate a formal proforma invoice. Dispatch begins upon bank remittance confirmation."
-                  checked={formData.paymentMethod === 'bank_transfer'}
-                  onChange={handleInputChange}
-                />
-                <PaymentOption
-                  id="credit"
-                  title="GymHub Net-30 Trade Credit"
-                  description="Available for verified gym chain accounts with active trade facilities."
-                  checked={formData.paymentMethod === 'credit'}
-                  onChange={handleInputChange}
-                />
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                {/* Option 1: Instant Online Gateway */}
+                <label
+                  style={{
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    padding: '16px',
+                    borderRadius: '12px',
+                    border: formData.paymentMethod === 'online' ? '1px solid #8c4f16' : '1px solid #ede0d9',
+                    backgroundColor: formData.paymentMethod === 'online' ? '#fff1e9' : '#ffffff',
+                    cursor: 'pointer',
+                    transition: '0.2s ease',
+                  }}
+                >
+                  <input
+                    type="radio"
+                    name="paymentMethod"
+                    value="online"
+                    checked={formData.paymentMethod === 'online'}
+                    onChange={handleInputChange}
+                    style={{ marginTop: '3px', accentColor: '#8c4f16' }}
+                  />
+                  <div style={{ marginLeft: '12px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <span style={{ fontSize: '13px', fontWeight: '700', color: '#211a16' }}>
+                        Online Payment (NetBanking / UPI / Corporate Cards)
+                      </span>
+                      <span style={{ fontSize: '10px', fontWeight: '700', color: '#15803d', backgroundColor: '#dcfce7', padding: '2px 6px', borderRadius: '4px' }}>
+                        Fastest Dispatch
+                      </span>
+                    </div>
+                    <p style={{ margin: '4px 0 0 0', fontSize: '12px', color: '#79573d' }}>
+                      Secure checkout gateway (Razorpay API integration ready).
+                    </p>
+                  </div>
+                </label>
+
+                {/* Option 2: RTGS / NEFT Direct Bank Transfer */}
+                <label
+                  style={{
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    padding: '16px',
+                    borderRadius: '12px',
+                    border: formData.paymentMethod === 'bank_transfer' ? '1px solid #8c4f16' : '1px solid #ede0d9',
+                    backgroundColor: formData.paymentMethod === 'bank_transfer' ? '#fff1e9' : '#ffffff',
+                    cursor: 'pointer',
+                    transition: '0.2s ease',
+                  }}
+                >
+                  <input
+                    type="radio"
+                    name="paymentMethod"
+                    value="bank_transfer"
+                    checked={formData.paymentMethod === 'bank_transfer'}
+                    onChange={handleInputChange}
+                    style={{ marginTop: '3px', accentColor: '#8c4f16' }}
+                  />
+                  <div style={{ marginLeft: '12px' }}>
+                    <span style={{ fontSize: '13px', fontWeight: '700', color: '#211a16' }}>
+                      Direct Bank Transfer / RTGS / NEFT
+                    </span>
+                    <p style={{ margin: '4px 0 0 0', fontSize: '12px', color: '#79573d' }}>
+                      Generate a formal proforma invoice. Dispatch begins upon bank remittance confirmation.
+                    </p>
+                  </div>
+                </label>
+
+                {/* Option 3: B2B Credit Line */}
+                <label
+                  style={{
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    padding: '16px',
+                    borderRadius: '12px',
+                    border: formData.paymentMethod === 'credit' ? '1px solid #8c4f16' : '1px solid #ede0d9',
+                    backgroundColor: formData.paymentMethod === 'credit' ? '#fff1e9' : '#ffffff',
+                    cursor: 'pointer',
+                    transition: '0.2s ease',
+                  }}
+                >
+                  <input
+                    type="radio"
+                    name="paymentMethod"
+                    value="credit"
+                    checked={formData.paymentMethod === 'credit'}
+                    onChange={handleInputChange}
+                    style={{ marginTop: '3px', accentColor: '#8c4f16' }}
+                  />
+                  <div style={{ marginLeft: '12px' }}>
+                    <span style={{ fontSize: '13px', fontWeight: '700', color: '#211a16' }}>
+                      GymHub Net-30 Trade Credit
+                    </span>
+                    <p style={{ margin: '4px 0 0 0', fontSize: '12px', color: '#79573d' }}>
+                      Available for verified gym chain accounts with active trade facilities.
+                    </p>
+                  </div>
+                </label>
               </div>
             </div>
-
           </div>
 
           {/* Right Column: Order Summary & Confirmation Button */}
-          <div style={styles.rightColumn}>
-            <div style={styles.stickySummaryCard}>
-              <h2 style={styles.summaryTitle}>Purchase Order Summary</h2>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            <div
+              style={{
+                backgroundColor: '#ffffff',
+                border: '1px solid #ede0d9',
+                borderRadius: '16px',
+                padding: '24px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '16px',
+                position: 'sticky',
+                top: '84px',
+              }}
+            >
+              <h2 style={{ margin: 0, fontSize: '16px', fontWeight: '700', color: '#211a16' }}>
+                Purchase Order Summary
+              </h2>
 
               {/* Items Mini List */}
-              <div style={styles.miniListContainer}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', maxHeight: '200px', overflowY: 'auto', paddingRight: '4px' }}>
                 {orderSummary.items.map((item, idx) => (
-                  <div key={idx} style={styles.miniListItem}>
-                    <div style={styles.miniItemInfo}>
-                      <p style={styles.miniItemName}>{item.name}</p>
-                      <p style={styles.miniItemMeta}>
+                  <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', fontSize: '12px', borderBottom: '1px solid #ede0d9', paddingBottom: '8px' }}>
+                    <div style={{ maxWidth: '70%' }}>
+                      <p style={{ margin: 0, fontWeight: '600', color: '#211a16', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                        {item.name}
+                      </p>
+                      <p style={{ margin: '2px 0 0 0', fontSize: '11px', color: '#79573d' }}>
                         Qty: {item.qty} &bull; {item.supplier}
                       </p>
                     </div>
-                    <span style={styles.miniItemPrice}>
+                    <span style={{ fontWeight: '700', color: '#211a16' }}>
                       ₹{(item.price * item.qty).toLocaleString('en-IN')}
                     </span>
                   </div>
@@ -298,25 +610,25 @@ const Checkout = () => {
               </div>
 
               {/* Pricing breakdown */}
-              <div style={styles.costBreakdown}>
-                <div style={styles.costRow}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '12px', color: '#534439' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                   <span>Subtotal (3 items)</span>
-                  <span style={styles.costValueDark}>₹{orderSummary.subtotal.toLocaleString('en-IN')}</span>
+                  <span style={{ fontWeight: '600', color: '#211a16' }}>₹{orderSummary.subtotal.toLocaleString('en-IN')}</span>
                 </div>
-                <div style={styles.costRow}>
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                   <span>GST (18% B2B)</span>
-                  <span style={styles.costValueDark}>₹{orderSummary.gst.toLocaleString('en-IN')}</span>
+                  <span style={{ fontWeight: '600', color: '#211a16' }}>₹{orderSummary.gst.toLocaleString('en-IN')}</span>
                 </div>
-                <div style={styles.costRow}>
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                   <span>Commercial Freight</span>
-                  <span style={styles.freeText}>FREE</span>
+                  <span style={{ fontWeight: '600', color: '#15803d' }}>FREE</span>
                 </div>
               </div>
 
               {/* Total */}
-              <div style={styles.grandTotalContainer}>
-                <span style={styles.grandTotalLabel}>Total Order Value</span>
-                <span style={styles.grandTotalValue}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', paddingTop: '10px', borderTop: '1px solid #ede0d9' }}>
+                <span style={{ fontSize: '13px', fontWeight: '700', color: '#211a16' }}>Total Order Value</span>
+                <span style={{ fontSize: '20px', fontWeight: '800', color: '#8c4f16' }}>
                   ₹{orderSummary.total.toLocaleString('en-IN')}
                 </span>
               </div>
@@ -326,15 +638,24 @@ const Checkout = () => {
                 type="submit"
                 disabled={isSubmitting}
                 style={{
-                  ...styles.submitButton,
+                  width: '100%',
+                  padding: '12px',
+                  borderRadius: '10px',
+                  fontSize: '14px',
+                  fontWeight: '600',
+                  color: '#ffffff',
+                  backgroundColor: '#8c4f16',
+                  border: 'none',
                   cursor: isSubmitting ? 'not-allowed' : 'pointer',
+                  boxShadow: '0 2px 8px rgba(140, 79, 22, 0.2)',
                   opacity: isSubmitting ? 0.7 : 1,
+                  transition: 'opacity 0.2s ease',
                 }}
               >
                 {isSubmitting ? 'Generating Purchase Order...' : 'Confirm & Place Order →'}
               </button>
 
-              <p style={styles.securityNotice}>
+              <p style={{ margin: 0, fontSize: '10px', textAlign: 'center', color: '#857468', lineHeight: '1.3' }}>
                 By clicking Confirm, you authorize GymHub to generate a binding B2B sales invoice for your GSTIN.
               </p>
             </div>
@@ -343,306 +664,6 @@ const Checkout = () => {
       </form>
     </div>
   );
-};
-
-// ==========================================
-// STYLES OBJECT
-// ==========================================
-const styles = {
-  pageContainer: {
-    padding: '24px',
-    backgroundColor: '#fff8f5',
-    minHeight: '100%',
-    boxSizing: 'border-box',
-  },
-  headerContainer: {
-    marginBottom: '24px',
-  },
-  breadcrumb: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '8px',
-    fontSize: '13px',
-    color: '#79573d',
-    marginBottom: '4px',
-  },
-  breadcrumbLink: {
-    color: '#8c4f16',
-    textDecoration: 'none',
-    fontWeight: '600',
-  },
-  breadcrumbCurrent: {
-    fontWeight: '600',
-    color: '#211a16',
-  },
-  mainTitle: {
-    margin: 0,
-    fontSize: '24px',
-    fontWeight: '700',
-    color: '#211a16',
-  },
-  subtitle: {
-    margin: '4px 0 0 0',
-    fontSize: '13px',
-    color: '#79573d',
-  },
-  gridContainer: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-    gap: '24px',
-    alignItems: 'start',
-  },
-  leftColumn: {
-    gridColumn: 'span 2',
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '20px',
-  },
-  card: {
-    backgroundColor: '#ffffff',
-    border: '1px solid #ede0d9',
-    borderRadius: '16px',
-    padding: '24px',
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '16px',
-  },
-  sectionHeader: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    borderBottom: '1px solid #ede0d9',
-    paddingBottom: '12px',
-  },
-  sectionTitle: {
-    margin: 0,
-    fontSize: '16px',
-    fontWeight: '700',
-    color: '#211a16',
-    display: 'flex',
-    alignItems: 'center',
-    gap: '8px',
-  },
-  stepBadge: {
-    width: '24px',
-    height: '24px',
-    borderRadius: '50%',
-    backgroundColor: '#8c4f16',
-    color: '#ffffff',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    fontSize: '12px',
-    fontWeight: '700',
-    flexShrink: 0,
-  },
-  verifiedBadge: {
-    fontSize: '11px',
-    fontWeight: '600',
-    color: '#15803d',
-    backgroundColor: '#dcfce7',
-    padding: '2px 8px',
-    borderRadius: '4px',
-  },
-  formGridTwoCols: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-    gap: '16px',
-    fontSize: '12px',
-  },
-  formGridLogistics: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
-    gap: '16px',
-    fontSize: '12px',
-  },
-  inputLabel: {
-    display: 'block',
-    fontWeight: '600',
-    marginBottom: '6px',
-    color: '#534439',
-  },
-  textInput: {
-    width: '100%',
-    padding: '10px 12px',
-    borderRadius: '8px',
-    border: '1px solid #d8c3b5',
-    backgroundColor: '#fff1e9',
-    color: '#211a16',
-    outline: 'none',
-    boxSizing: 'border-box',
-  },
-  textareaInput: {
-    width: '100%',
-    padding: '10px 12px',
-    borderRadius: '8px',
-    border: '1px solid #d8c3b5',
-    backgroundColor: '#fff1e9',
-    color: '#211a16',
-    outline: 'none',
-    boxSizing: 'border-box',
-    fontFamily: 'inherit',
-    resize: 'vertical',
-  },
-  paymentStack: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '12px',
-  },
-  paymentOptionLabel: {
-    display: 'flex',
-    alignItems: 'flex-start',
-    padding: '16px',
-    borderRadius: '12px',
-    borderWidth: '1px',
-    borderStyle: 'solid',
-    cursor: 'pointer',
-    transition: '0.2s ease',
-  },
-  radioInput: {
-    marginTop: '3px',
-    accentColor: '#8c4f16',
-  },
-  paymentContent: {
-    marginLeft: '12px',
-  },
-  paymentHeaderRow: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '8px',
-    flexWrap: 'wrap',
-  },
-  paymentTitle: {
-    fontSize: '13px',
-    fontWeight: '700',
-    color: '#211a16',
-  },
-  paymentBadge: {
-    fontSize: '10px',
-    fontWeight: '700',
-    color: '#15803d',
-    backgroundColor: '#dcfce7',
-    padding: '2px 6px',
-    borderRadius: '4px',
-  },
-  paymentDesc: {
-    margin: '4px 0 0 0',
-    fontSize: '12px',
-    color: '#79573d',
-  },
-  rightColumn: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '16px',
-  },
-  stickySummaryCard: {
-    backgroundColor: '#ffffff',
-    border: '1px solid #ede0d9',
-    borderRadius: '16px',
-    padding: '24px',
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '16px',
-    position: 'sticky',
-    top: '84px',
-  },
-  summaryTitle: {
-    margin: 0,
-    fontSize: '16px',
-    fontWeight: '700',
-    color: '#211a16',
-  },
-  miniListContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '10px',
-    maxHeight: '200px',
-    overflowY: 'auto',
-    paddingRight: '4px',
-  },
-  miniListItem: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    fontSize: '12px',
-    borderBottom: '1px solid #ede0d9',
-    paddingBottom: '8px',
-  },
-  miniItemInfo: {
-    maxWidth: '70%',
-  },
-  miniItemName: {
-    margin: 0,
-    fontWeight: '600',
-    color: '#211a16',
-    whiteSpace: 'nowrap',
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-  },
-  miniItemMeta: {
-    margin: '2px 0 0 0',
-    fontSize: '11px',
-    color: '#79573d',
-  },
-  miniItemPrice: {
-    fontWeight: '700',
-    color: '#211a16',
-  },
-  costBreakdown: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '8px',
-    fontSize: '12px',
-    color: '#534439',
-  },
-  costRow: {
-    display: 'flex',
-    justifyContent: 'space-between',
-  },
-  costValueDark: {
-    fontWeight: '600',
-    color: '#211a16',
-  },
-  freeText: {
-    fontWeight: '600',
-    color: '#15803d',
-  },
-  grandTotalContainer: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'baseline',
-    paddingTop: '10px',
-    borderTop: '1px solid #ede0d9',
-  },
-  grandTotalLabel: {
-    fontSize: '13px',
-    fontWeight: '700',
-    color: '#211a16',
-  },
-  grandTotalValue: {
-    fontSize: '20px',
-    fontWeight: '800',
-    color: '#8c4f16',
-  },
-  submitButton: {
-    width: '100%',
-    padding: '12px',
-    borderRadius: '10px',
-    fontSize: '14px',
-    fontWeight: '600',
-    color: '#ffffff',
-    backgroundColor: '#8c4f16',
-    border: 'none',
-    boxShadow: '0 2px 8px rgba(140, 79, 22, 0.2)',
-    transition: 'opacity 0.2s ease',
-  },
-  securityNotice: {
-    margin: 0,
-    fontSize: '10px',
-    textAlign: 'center',
-    color: '#857468',
-    lineHeight: '1.3',
-  },
 };
 
 export default Checkout;

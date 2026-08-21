@@ -1,106 +1,92 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-const Notifications = () => {
+const CustomerNotifications = () => {
   const [filterType, setFilterType] = useState('All');
 
-  // Requirement #29: Supplier Notifications Dataset
   const initialNotifications = [
     {
       id: 1,
-      title: 'New Wholesale Order Received',
-      description: 'IronFit Gym placed purchase order #GH-1024 for 2x Commercial Motorized Treadmills (₹1,70,000).',
+      title: 'Order Shipped',
+      description: 'Your order ORD-8938 (Commercial Power Rack with Pulley) has been dispatched by Apex Fitness Gear.',
       category: 'Order',
-      time: '15 mins ago',
+      time: '2 hours ago',
       read: false,
-      icon: '🛒',
-      actionLink: '/supplier/orders/GH-1024'
+      icon: '🚚',
+      actionLink: '/customer/orders',
     },
     {
       id: 2,
-      title: 'Low Stock Alert',
-      description: 'Stock for "Olympic 20kg Hard Chrome Barbell" is down to 4 units (Threshold: 10).',
-      category: 'Inventory',
-      time: '1 hour ago',
+      title: 'Payment Confirmed',
+      description: 'Payment of ₹1,80,000 for order ORD-8920 was received and verified.',
+      category: 'Payment',
+      time: '1 day ago',
       read: false,
-      icon: '⚠️',
-      actionLink: '/supplier/inventory'
+      icon: '💳',
+      actionLink: '/customer/orders',
     },
     {
       id: 3,
-      title: 'Buyer Inquiry Received',
-      description: 'Alpha Fitness Club sent a message regarding freight delivery timelines for Order #GH-1023.',
-      category: 'Message',
-      time: '3 hours ago',
-      read: false,
-      icon: '💬',
-      actionLink: '/supplier/messages'
+      title: 'Order Delivered',
+      description: 'ORD-8920 (Commercial Spin Bike Pro x4) was delivered and marked complete.',
+      category: 'Order',
+      time: '2 days ago',
+      read: true,
+      icon: '✅',
+      actionLink: '/customer/orders',
     },
     {
       id: 4,
-      title: 'Product Approved by Admin',
-      description: 'Your product listing "Commercial Motorized Treadmill T-900" is now active on the marketplace.',
+      title: 'Price Drop on Saved Product',
+      description: 'Olympic Urethane Weight Plates Set (250kg) dropped 8% in price this week.',
       category: 'Product',
-      time: 'Yesterday',
+      time: '3 days ago',
       read: true,
-      icon: '✅',
-      actionLink: '/supplier/products'
+      icon: '🏷️',
+      actionLink: '/customer/products',
     },
     {
       id: 5,
-      title: 'Supplier KYC Verification Approved',
-      description: 'Your legal business documents have been verified. You now have full B2B selling privileges.',
-      category: 'Verification',
-      time: '3 days ago',
+      title: 'Supplier Message',
+      description: 'FitPro Industrial Ltd replied regarding your bulk quote request.',
+      category: 'Message',
+      time: '4 days ago',
       read: true,
-      icon: '🛡️',
-      actionLink: '/supplier/profile'
+      icon: '💬',
+      actionLink: '/customer/orders',
     },
-    {
-      id: 6,
-      title: 'Payment Credited',
-      description: 'Payout of ₹1,42,500 for delivered order #GH-1002 has been released to your registered account.',
-      category: 'Payment',
-      time: '5 days ago',
-      read: true,
-      icon: '💳',
-      actionLink: '/supplier/orders'
-    }
   ];
 
   const [notifications, setNotifications] = useState(initialNotifications);
 
-  // Filter logic
   const filteredNotifications = notifications.filter((item) => {
     if (filterType === 'Unread') return !item.read;
     if (filterType === 'All') return true;
     return item.category === filterType;
   });
 
-  const handleMarkAllRead = () => {
+  const handleMarkAllAsRead = () => {
     setNotifications(notifications.map((n) => ({ ...n, read: true })));
   };
 
   const handleToggleRead = (id) => {
-    setNotifications(
-      notifications.map((n) => (n.id === id ? { ...n, read: !n.read } : n))
-    );
+    setNotifications(notifications.map((n) => (n.id === id ? { ...n, read: !n.read } : n)));
   };
 
-  const handleDelete = (id) => {
+  const handleDeleteNotification = (id) => {
     setNotifications(notifications.filter((n) => n.id !== id));
   };
 
   const unreadCount = notifications.filter((n) => !n.read).length;
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+    <div style={{ padding: '24px', backgroundColor: '#fff8f5', minHeight: '100%', boxSizing: 'border-box', display: 'flex', flexDirection: 'column', gap: '24px' }}>
       {/* Page Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <h1 style={{ margin: 0, fontSize: '24px', fontWeight: '600', color: '#211a16' }}>
-              Supplier Notifications & Alerts
+            <h1 style={{ margin: 0, fontSize: '24px', fontWeight: '700', color: '#211a16' }}>
+              Notifications
             </h1>
             {unreadCount > 0 && (
               <span
@@ -110,30 +96,30 @@ const Notifications = () => {
                   color: '#ffffff',
                   borderRadius: '9999px',
                   fontSize: '12px',
-                  fontWeight: '700'
+                  fontWeight: '700',
                 }}
               >
-                {unreadCount} unread
+                {unreadCount} new
               </span>
             )}
           </div>
-          <p style={{ margin: '4px 0 0', fontSize: '14px', color: '#534439' }}>
-            Stay updated on new wholesale orders, inventory reorder thresholds, and buyer inquiries.
+          <p style={{ margin: '4px 0 0', fontSize: '13px', color: '#534439' }}>
+            Order updates, payment confirmations, and messages from suppliers.
           </p>
         </div>
 
         {unreadCount > 0 && (
           <button
-            onClick={handleMarkAllRead}
+            onClick={handleMarkAllAsRead}
             style={{
               padding: '8px 14px',
-              backgroundColor: '#fff8f5',
+              backgroundColor: '#ffffff',
               border: '1px solid #d8c3b5',
               borderRadius: '6px',
               color: '#8c4f16',
               fontWeight: '600',
               fontSize: '13px',
-              cursor: 'pointer'
+              cursor: 'pointer',
             }}
           >
             Mark all as read
@@ -144,16 +130,16 @@ const Notifications = () => {
       {/* Filter Tabs */}
       <div
         style={{
-          backgroundColor: '#fff8f5',
-          border: '1px solid #d8c3b5',
+          backgroundColor: '#ffffff',
+          border: '1px solid #ede0d9',
           borderRadius: '8px',
           padding: '12px 16px',
           display: 'flex',
           gap: '8px',
-          overflowX: 'auto'
+          overflowX: 'auto',
         }}
       >
-        {['All', 'Unread', 'Order', 'Inventory', 'Message', 'Product', 'Verification'].map((tab) => (
+        {['All', 'Unread', 'Order', 'Payment', 'Product', 'Message'].map((tab) => (
           <button
             key={tab}
             onClick={() => setFilterType(tab)}
@@ -166,7 +152,7 @@ const Notifications = () => {
               fontWeight: filterType === tab ? '600' : '400',
               fontSize: '13px',
               cursor: 'pointer',
-              whiteSpace: 'nowrap'
+              whiteSpace: 'nowrap',
             }}
           >
             {tab}
@@ -181,22 +167,22 @@ const Notifications = () => {
             <div
               key={item.id}
               style={{
-                backgroundColor: item.read ? '#fff8f5' : '#fff1e9',
+                backgroundColor: item.read ? '#ffffff' : '#fff1e9',
                 border: item.read ? '1px solid #ede0d9' : '1px solid #e29657',
-                borderRadius: '8px',
+                borderRadius: '12px',
                 padding: '16px 20px',
                 display: 'flex',
                 alignItems: 'flex-start',
                 justifyContent: 'space-between',
                 gap: '16px',
-                transition: 'background-color 0.2s ease'
+                flexWrap: 'wrap',
               }}
             >
               <div style={{ display: 'flex', alignItems: 'flex-start', gap: '14px' }}>
                 <span style={{ fontSize: '22px', marginTop: '2px' }}>{item.icon}</span>
                 <div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <h3 style={{ margin: 0, fontSize: '15px', fontWeight: '600', color: '#211a16' }}>
+                    <h3 style={{ margin: 0, fontSize: '15px', fontWeight: '700', color: '#211a16' }}>
                       {item.title}
                     </h3>
                     {!item.read && (
@@ -206,7 +192,7 @@ const Notifications = () => {
                           height: '8px',
                           borderRadius: '9999px',
                           backgroundColor: '#ba1a1a',
-                          display: 'inline-block'
+                          display: 'inline-block',
                         }}
                       />
                     )}
@@ -222,7 +208,6 @@ const Notifications = () => {
                 </div>
               </div>
 
-              {/* Action Controls */}
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
                 <Link
                   to={item.actionLink}
@@ -234,7 +219,7 @@ const Notifications = () => {
                     borderRadius: '4px',
                     color: '#8c4f16',
                     fontSize: '12px',
-                    fontWeight: '600'
+                    fontWeight: '600',
                   }}
                 >
                   View
@@ -242,28 +227,14 @@ const Notifications = () => {
                 <button
                   onClick={() => handleToggleRead(item.id)}
                   title={item.read ? 'Mark as unread' : 'Mark as read'}
-                  style={{
-                    background: 'none',
-                    border: 'none',
-                    fontSize: '14px',
-                    color: '#534439',
-                    cursor: 'pointer',
-                    padding: '4px'
-                  }}
+                  style={{ background: 'none', border: 'none', fontSize: '14px', color: '#534439', cursor: 'pointer', padding: '4px' }}
                 >
                   {item.read ? '✉️' : '👁️'}
                 </button>
                 <button
-                  onClick={() => handleDelete(item.id)}
-                  title="Dismiss notification"
-                  style={{
-                    background: 'none',
-                    border: 'none',
-                    fontSize: '14px',
-                    color: '#ba1a1a',
-                    cursor: 'pointer',
-                    padding: '4px'
-                  }}
+                  onClick={() => handleDeleteNotification(item.id)}
+                  title="Delete notification"
+                  style={{ background: 'none', border: 'none', fontSize: '14px', color: '#ba1a1a', cursor: 'pointer', padding: '4px' }}
                 >
                   ✕
                 </button>
@@ -273,16 +244,16 @@ const Notifications = () => {
         ) : (
           <div
             style={{
-              backgroundColor: '#fff8f5',
-              border: '1px solid #d8c3b5',
-              borderRadius: '8px',
-              padding: '40px',
+              backgroundColor: '#ffffff',
+              border: '1px solid #ede0d9',
+              borderRadius: '16px',
+              padding: '48px',
               textAlign: 'center',
               color: '#857468',
-              fontSize: '14px'
+              fontSize: '14px',
             }}
           >
-            No notifications found in this category.
+            No notifications in this category.
           </div>
         )}
       </div>
@@ -290,4 +261,4 @@ const Notifications = () => {
   );
 };
 
-export default Notifications;
+export default CustomerNotifications;

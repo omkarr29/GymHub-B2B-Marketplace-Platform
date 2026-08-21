@@ -1,13 +1,16 @@
 import React, { useState, useMemo } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
+import { useCart } from '../../context/CartContext.jsx';
 
 const BrowseProducts = () => {
+  const { addToCart } = useCart();
   const [searchParams] = useSearchParams();
   const initialSearch = searchParams.get('search') || '';
+  const initialCategory = searchParams.get('category') || 'All';
 
   // Local filter states
   const [searchTerm, setSearchTerm] = useState(initialSearch);
-  const [selectedCategory, setSelectedCategory] = useState('All');
+  const [selectedCategory, setSelectedCategory] = useState(initialCategory);
   const [priceRange, setPriceRange] = useState(300000);
   const [sortBy, setSortBy] = useState('popular');
   const [addedToast, setAddedToast] = useState(null);
@@ -20,6 +23,7 @@ const BrowseProducts = () => {
     'Free Weights',
     'Functional Training',
     'Gym Accessories',
+    'Recovery Equipment',
     'Gym Flooring',
     'Commercial Gym Equipment',
   ];
@@ -136,6 +140,28 @@ const BrowseProducts = () => {
       minOrderQty: '2 Kits',
       image: 'https://images.unsplash.com/photo-1518611012118-696072aa579a?w=500&auto=format&fit=crop&q=60',
     },
+    {
+      id: 'prod-11',
+      name: 'Commercial Gym Storage & Accessory Rack Set',
+      category: 'Gym Accessories',
+      supplier: 'Apex Fitness Gear',
+      price: 18500,
+      rating: 4.6,
+      stock: 'In Stock',
+      minOrderQty: '1 Set',
+      image: 'https://images.unsplash.com/photo-1571902943202-507ec2618e8f?w=500&auto=format&fit=crop&q=60',
+    },
+    {
+      id: 'prod-12',
+      name: 'Percussion Massage & Foam Roller Recovery Kit',
+      category: 'Recovery Equipment',
+      supplier: 'FitPro Industrial Ltd',
+      price: 24500,
+      rating: 4.7,
+      stock: 'In Stock',
+      minOrderQty: '1 Kit',
+      image: 'https://images.unsplash.com/photo-1519824145371-296894a0daa9?w=500&auto=format&fit=crop&q=60',
+    },
   ];
 
   // Filter & Search Logic
@@ -159,48 +185,17 @@ const BrowseProducts = () => {
       });
   }, [searchTerm, selectedCategory, priceRange, sortBy]);
 
-  const handleAddToCart = (productName) => {
-    setAddedToast(`"${productName}" added to order draft.`);
+  const handleAddToCart = (product) => {
+    addToCart(product, 1);
+    setAddedToast(`"${product.name}" added to cart.`);
     setTimeout(() => setAddedToast(null), 3000);
   };
 
   return (
     <div style={{ padding: '24px', backgroundColor: '#fff8f5', minHeight: '100%', boxSizing: 'border-box' }}>
-      {/* Embedded CSS Animations */}
-      <style>{`
-        @keyframes fadeInSlide {
-          from { opacity: 0; transform: translateY(12px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes bounceIn {
-          0% { opacity: 0; transform: translateY(20px) scale(0.95); }
-          100% { opacity: 1; transform: translateY(0) scale(1); }
-        }
-        .product-card {
-          transition: transform 0.25s ease, box-shadow 0.25s ease;
-        }
-        .product-card:hover {
-          transform: translateY(-5px);
-          box-shadow: 0 10px 25px -5px rgba(140, 79, 22, 0.12), 0 8px 10px -6px rgba(140, 79, 22, 0.12);
-        }
-        .product-image {
-          transition: transform 0.4s ease;
-        }
-        .product-card:hover .product-image {
-          transform: scale(1.05);
-        }
-        .animate-fade {
-          animation: fadeInSlide 0.35s ease forwards;
-        }
-        .toast-notification {
-          animation: bounceIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-        }
-      `}</style>
-
       {/* Toast Notification */}
       {addedToast && (
         <div
-          className="toast-notification"
           style={{
             position: 'fixed',
             bottom: '24px',
@@ -212,7 +207,7 @@ const BrowseProducts = () => {
             color: '#ffffff',
             fontSize: '13px',
             fontWeight: '600',
-            boxShadow: '0 4px 16px rgba(0,104,122,0.3)',
+            boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
             display: 'flex',
             alignItems: 'center',
             gap: '8px',
@@ -260,15 +255,6 @@ const BrowseProducts = () => {
               color: '#211a16',
               outline: 'none',
               boxSizing: 'border-box',
-              transition: 'all 0.2s ease',
-            }}
-            onFocus={(e) => {
-              e.target.style.borderColor = '#8c4f16';
-              e.target.style.boxShadow = '0 0 0 3px rgba(140, 79, 22, 0.1)';
-            }}
-            onBlur={(e) => {
-              e.target.style.borderColor = '#d8c3b5';
-              e.target.style.boxShadow = 'none';
             }}
           />
         </div>
@@ -276,7 +262,6 @@ const BrowseProducts = () => {
 
       {/* Main Layout: Filters & Products */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '24px', alignItems: 'start' }}>
-        
         {/* Left Filter Column */}
         <div
           style={{
@@ -287,7 +272,6 @@ const BrowseProducts = () => {
             display: 'flex',
             flexDirection: 'column',
             gap: '20px',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.02)',
           }}
         >
           <div
@@ -316,10 +300,7 @@ const BrowseProducts = () => {
                 fontSize: '12px',
                 fontWeight: '600',
                 color: '#8c4f16',
-                transition: 'opacity 0.2s',
               }}
-              onMouseEnter={(e) => e.target.style.opacity = '0.7'}
-              onMouseLeave={(e) => e.target.style.opacity = '1'}
             >
               Reset All
             </button>
@@ -355,13 +336,7 @@ const BrowseProducts = () => {
                     color: selectedCategory === cat ? '#8c4f16' : '#534439',
                     border: 'none',
                     cursor: 'pointer',
-                    transition: 'all 0.2s ease',
-                  }}
-                  onMouseEnter={(e) => {
-                    if (selectedCategory !== cat) e.target.style.backgroundColor = '#fff8f5';
-                  }}
-                  onMouseLeave={(e) => {
-                    if (selectedCategory !== cat) e.target.style.backgroundColor = 'transparent';
+                    transition: '0.2s ease',
                   }}
                 >
                   {cat}
@@ -405,7 +380,6 @@ const BrowseProducts = () => {
 
         {/* Right Product Listing Area */}
         <div style={{ gridColumn: 'span 2', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-          
           {/* Active Summary & Sorting Bar */}
           <div
             style={{
@@ -438,7 +412,6 @@ const BrowseProducts = () => {
                   fontSize: '12px',
                   color: '#211a16',
                   outline: 'none',
-                  cursor: 'pointer',
                 }}
               >
                 <option value="popular">Popular / Recommended</option>
@@ -452,7 +425,6 @@ const BrowseProducts = () => {
           {/* Product Grid */}
           {filteredProducts.length === 0 ? (
             <div
-              className="animate-fade"
               style={{
                 padding: '48px 24px',
                 textAlign: 'center',
@@ -479,7 +451,6 @@ const BrowseProducts = () => {
               {filteredProducts.map((product) => (
                 <div
                   key={product.id}
-                  className="product-card animate-fade"
                   style={{
                     backgroundColor: '#ffffff',
                     border: '1px solid #ede0d9',
@@ -496,7 +467,6 @@ const BrowseProducts = () => {
                       <img
                         src={product.image}
                         alt={product.name}
-                        className="product-image"
                         style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                       />
                       <span
@@ -510,7 +480,6 @@ const BrowseProducts = () => {
                           borderRadius: '9999px',
                           backgroundColor: '#fff1e9',
                           color: '#8c4f16',
-                          boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
                         }}
                       >
                         ★ {product.rating}
@@ -610,16 +579,13 @@ const BrowseProducts = () => {
                           backgroundColor: '#fff1e9',
                           color: '#8c4f16',
                           border: '1px solid #d8c3b5',
-                          transition: 'background-color 0.2s',
                         }}
-                        onMouseEnter={(e) => e.target.style.backgroundColor = '#fed1b0'}
-                        onMouseLeave={(e) => e.target.style.backgroundColor = '#fff1e9'}
                       >
                         View Specs
                       </Link>
                       <button
                         type="button"
-                        onClick={() => handleAddToCart(product.name)}
+                        onClick={() => handleAddToCart(product)}
                         style={{
                           padding: '8px',
                           fontSize: '12px',
@@ -629,12 +595,7 @@ const BrowseProducts = () => {
                           cursor: 'pointer',
                           backgroundColor: '#8c4f16',
                           color: '#ffffff',
-                          transition: 'background-color 0.2s, transform 0.1s',
                         }}
-                        onMouseEnter={(e) => e.target.style.backgroundColor = '#744010'}
-                        onMouseLeave={(e) => e.target.style.backgroundColor = '#8c4f16'}
-                        onMouseDown={(e) => e.target.style.transform = 'scale(0.97)'}
-                        onMouseUp={(e) => e.target.style.transform = 'scale(1)'}
                       >
                         + Add to Cart
                       </button>

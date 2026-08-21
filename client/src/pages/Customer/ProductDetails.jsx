@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useCart } from '../../context/CartContext.jsx';
 
 const ProductDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { addToCart } = useCart();
 
   // Local interaction states
   const [quantity, setQuantity] = useState(1);
@@ -38,9 +40,9 @@ const ProductDetails = () => {
         { label: 'Warranty', value: '5 Years Frame, 3 Years Motor Commercial Warranty' },
       ],
       wholesaleTiers: [
-        { min: 1, max: 2, units: '1 - 2 Units', pricePerUnit: '₹1,45,000', rawPrice: 145000 },
-        { min: 3, max: 5, units: '3 - 5 Units', pricePerUnit: '₹1,38,000 (Save 5%)', rawPrice: 138000 },
-        { min: 6, max: Infinity, units: '6+ Units (Bulk Setup)', pricePerUnit: '₹1,29,000 (Save 11%)', rawPrice: 129000 },
+        { units: '1 - 2 Units', pricePerUnit: '₹1,45,000' },
+        { units: '3 - 5 Units', pricePerUnit: '₹1,38,000 (Save 5%)' },
+        { units: '6+ Units (Bulk Setup)', pricePerUnit: '₹1,29,000 (Save 11%)' },
       ],
     },
     'prod-2': {
@@ -68,26 +70,15 @@ const ProductDetails = () => {
         { label: 'Warranty', value: '10 Years Frame Warranty' },
       ],
       wholesaleTiers: [
-        { min: 2, max: 5, units: '2 - 5 Units', pricePerUnit: '₹28,500', rawPrice: 28500 },
-        { min: 6, max: 10, units: '6 - 10 Units', pricePerUnit: '₹26,000', rawPrice: 26000 },
-        { min: 11, max: Infinity, units: '10+ Units', pricePerUnit: '₹24,200', rawPrice: 24200 },
+        { units: '2 - 5 Units', pricePerUnit: '₹28,500' },
+        { units: '6 - 10 Units', pricePerUnit: '₹26,000' },
+        { units: '10+ Units', pricePerUnit: '₹24,200' },
       ],
     },
   };
 
-  // Safe fallback product mapping with dynamic ID support
+  // Fallback for demo navigation
   const product = productsDatabase[id] || productsDatabase['prod-1'];
-
-  // Calculate dynamic unit price based on active wholesale tiers
-  const getCurrentUnitPrice = () => {
-    if (!product.wholesaleTiers) return product.price;
-    const matchedTier = product.wholesaleTiers.find(
-      (tier) => quantity >= tier.min && quantity <= tier.max
-    );
-    return matchedTier ? matchedTier.rawPrice : product.price;
-  };
-
-  const currentUnitPrice = getCurrentUnitPrice();
 
   const showNotification = (msg) => {
     setToastMessage(msg);
@@ -95,11 +86,13 @@ const ProductDetails = () => {
   };
 
   const handleAddToCart = () => {
+    addToCart(product, quantity);
     showNotification(`Added ${quantity} unit(s) of "${product.name}" to cart.`);
   };
 
   const handleBuyNow = () => {
-    navigate('/customer/checkout', { state: { product, quantity, total: currentUnitPrice * quantity } });
+    addToCart(product, quantity);
+    navigate('/customer/checkout');
   };
 
   return (
@@ -122,7 +115,6 @@ const ProductDetails = () => {
             display: 'flex',
             alignItems: 'center',
             gap: '8px',
-            animation: 'fadeIn 0.2s ease-out',
           }}
         >
           <span>✓</span>
@@ -258,13 +250,13 @@ const ProductDetails = () => {
               </span>
               <div style={{ display: 'flex', alignItems: 'baseline', gap: '12px' }}>
                 <span style={{ fontSize: '24px', fontWeight: '800', color: '#8c4f16' }}>
-                  ₹{currentUnitPrice.toLocaleString('en-IN')}
+                  ₹{product.price.toLocaleString('en-IN')}
                 </span>
                 <span style={{ fontSize: '13px', textDecoration: 'line-through', color: '#857468' }}>
                   MRP ₹{product.mrp.toLocaleString('en-IN')}
                 </span>
                 <span style={{ fontSize: '12px', fontWeight: '700', color: '#15803d' }}>
-                  Save ₹{(product.mrp - currentUnitPrice).toLocaleString('en-IN')}
+                  Save ₹{(product.mrp - product.price).toLocaleString('en-IN')}
                 </span>
               </div>
               <p style={{ margin: '4px 0 0 0', fontSize: '11px', color: '#79573d' }}>
@@ -324,7 +316,7 @@ const ProductDetails = () => {
                 </button>
               </div>
               <span style={{ fontSize: '12px', color: '#79573d' }}>
-                Subtotal: <strong>₹{(currentUnitPrice * quantity).toLocaleString('en-IN')}</strong>
+                Subtotal: <strong>₹{(product.price * quantity).toLocaleString('en-IN')}</strong>
               </span>
             </div>
 
@@ -470,23 +462,18 @@ const ProductDetails = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {product.wholesaleTiers.map((tier, idx) => {
-                    const isCurrentTier = quantity >= tier.min && quantity <= tier.max;
-                    return (
-                      <tr
-                        key={idx}
-                        style={{
-                          borderTop: '1px solid #ede0d9',
-                          backgroundColor: isCurrentTier ? '#fff1e9' : '#ffffff',
-                        }}
-                      >
-                        <td style={{ padding: '10px 14px', fontWeight: isCurrentTier ? '700' : '600', color: '#211a16' }}>
-                          {tier.units} {isCurrentTier && '(Active Tier)'}
-                        </td>
-                        <td style={{ padding: '10px 14px', fontWeight: '700', color: '#8c4f16' }}>{tier.pricePerUnit}</td>
-                      </tr>
-                    );
-                  })}
+                  {product.wholesaleTiers.map((tier, idx) => (
+                    <tr
+                      key={idx}
+                      style={{
+                        borderTop: '1px solid #ede0d9',
+                        backgroundColor: '#ffffff',
+                      }}
+                    >
+                      <td style={{ padding: '10px 14px', fontWeight: '600', color: '#211a16' }}>{tier.units}</td>
+                      <td style={{ padding: '10px 14px', fontWeight: '700', color: '#8c4f16' }}>{tier.pricePerUnit}</td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>
